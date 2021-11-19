@@ -12,6 +12,7 @@ public class SecurityQuestion {
         securityQuestion();
     }
 
+    //List of security questions
     private void securityQuestion() {
         securityQuestion.clear();
         securityQuestion.put(1, "What is your mother's maiden name?");
@@ -30,6 +31,7 @@ public class SecurityQuestion {
         return securityQuestion;
     }
 
+    //fetching index of the security questions
     public int questionIndex(final String question) {
         for (Map.Entry<Integer, String> entry : securityQuestion.entrySet()) {
             if (entry.getValue().equals(question)) {
@@ -39,6 +41,8 @@ public class SecurityQuestion {
         return -1;
     }
 
+    // Generating Random Questions
+    //Referred URL : https://www.educative.io/edpresso/how-to-generate-random-numbers-in-java
     public String generateRandomQuestion() {
         final int min = 1;
         final int max = 3;
@@ -46,7 +50,5 @@ public class SecurityQuestion {
         return securityQuestion.get(randomQuestionIndex);
     }
 
-    public void entrySet() {
-    }
 }
 

@@ -49,8 +49,13 @@ public class UserRegistration {
         String password = in.nextLine();
 
         SecurityQuestion securityQuestion = SecurityQuestion.getInstance();
+
+
         Map<Integer, String> securityQuest = securityQuestion.getSecurityQuestion();
         ArrayList<String> securityAnswers = new ArrayList<>();
+
+        //Referred URL : https://www.baeldung.com/java-map-entry
+        //Printing all our security questions(keys) and answers(value) in the file
         for (Map.Entry<Integer, String> entryAnswer : securityQuest.entrySet()) {
             fileWriter.append((entryAnswer.getValue()));
             securityAnswers.add(in.nextLine());

@@ -1,3 +1,4 @@
+import authentication.login.UserLogin;
 import authentication.registration.UserRegistration;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class Main {
                 new UserRegistration().register();
                 break;
             case "2":
-                // login
+                new UserLogin().login();
                 break;
             default:
                 System.exit(0);
