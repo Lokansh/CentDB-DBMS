@@ -5,12 +5,12 @@ import java.util.List;
 public class User {
     private final String username;
     private final String password;
-    private final List<String> securityQuestions;
+    private final List<String> securityAnswers;
 
-    public User(String username, String password, List<String> securityQuestions) {
+    public User(String username, String password, List<String> securityAnswers) {
         this.username = username;
         this.password = password;
-        this.securityQuestions = securityQuestions;
+        this.securityAnswers = securityAnswers;
     }
 
     public String getUsername() {
@@ -21,7 +21,7 @@ public class User {
         return password;
     }
 
-    public List<String> getSecurityQuestions() {
-        return securityQuestions;
+    public List<String> getSecurityAnswers() {
+        return securityAnswers;
     }
 }

@@ -1,6 +1,8 @@
 package authentication;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class SecurityQuestion {
 
@@ -15,9 +17,9 @@ public class SecurityQuestion {
     //List of security questions
     private void securityQuestion() {
         securityQuestion.clear();
-        securityQuestion.put(1, "What is your mother's maiden name?");
-        securityQuestion.put(2, "What is your first school name?");
-        securityQuestion.put(3, "What is your childhood friend's name?");
+        securityQuestion.put(0, "What is your mother's maiden name?");
+        securityQuestion.put(1, "What is your first school name?");
+        securityQuestion.put(2, "What is your childhood friend's name?");
     }
 
     public static SecurityQuestion getInstance() {
@@ -43,11 +45,10 @@ public class SecurityQuestion {
 
     // Generating Random Questions
     //Referred URL : https://www.educative.io/edpresso/how-to-generate-random-numbers-in-java
-    public String generateRandomQuestion() {
-        final int min = 1;
-        final int max = 3;
-        final int randomQuestionIndex = new Random().nextInt(max - min + 1) + min;
-        return securityQuestion.get(randomQuestionIndex);
+    public int generateRandomQuestion() {
+        final int min = 0;
+        final int max = 2;
+        return new Random().nextInt(max - min + 1) + min;
     }
 
 }

@@ -9,17 +9,17 @@ public final class Session {
     }
 
     public static Session getInstance() {
-        if(session == null) {
+        if (session == null) {
             session = new Session();
         }
         return session;
     }
 
-    public static User getUser() {
+    public User getUser() {
         return user;
     }
 
-    public static void setUser(User user) {
+    public void setUser(User user) {
         Session.user = user;
     }
 }
