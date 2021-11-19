@@ -1,9 +1,10 @@
 import authentication.registration.UserRegistration;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 //        accept user input
         String userArgument = null;
         Scanner s = new Scanner(System.in);
