@@ -1,4 +1,7 @@
 import authentication.login.UserLogin;
+import authentication.model.Session;
+import authentication.model.User;
+import authentication.model.UserDisplayMenu;
 import authentication.registration.UserRegistration;
 
 import java.io.IOException;
@@ -12,6 +15,8 @@ public class Main {
         userArgument = s.nextLine();
         userArgument = userArgument.trim();
         System.out.println(userArgument);
+        Session userSession = Session.getInstance();
+
 
         // "create database" to be replaced with PATTERN MATCHER : Lokansh working on the smae
 
@@ -37,6 +42,10 @@ public class Main {
                 break;
             case "2":
                 new UserLogin().login();
+                    if(userSession.getUser() != null) {
+                        UserDisplayMenu userDisplayMenu = new UserDisplayMenu();
+                        userDisplayMenu.displayMainMenu();
+                    }
                 break;
             default:
                 System.exit(0);
