@@ -1,24 +1,18 @@
+import QueryImplementation.QueryOperations;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         // accept user input
         String userArgument = null;
         Scanner s = new Scanner(System.in);
         userArgument = s.nextLine();
         userArgument = userArgument.trim();
         System.out.println(userArgument);
+        QueryOperations obj = new QueryOperations();
+        obj.createDatabase(userArgument);
 
-        // "create database" to be replaced with PATTERN MATCHER : Lokansh working on the smae
-
-        if (userArgument.contains("create database")){
-            String dbname = userArgument.replace("create database","");
-            dbname = dbname.trim();
-            CentDB dbobj = new CentDB();
-            String db_filename = "datafiles/" +dbname+".txt";
-            String writebackStr = dbname+";";
-            String writebackType = "create database";
-            dbobj.writeback(db_filename, writebackStr, writebackType);
-        }
     }
 }
