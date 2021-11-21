@@ -1,5 +1,7 @@
 package QueryImplementation;
 
+import com.sun.tools.javac.Main;
+
 import java.io.File;
 import java.util.regex.Pattern;
 
@@ -9,11 +11,9 @@ public class QueryOperations {
         //Matcher m;
         if (query.contains("create database")){
         //if (userArgument.matches("^create database$")) {
-            String dbname = query.replace("create database", "");
-            dbname = dbname.trim();
-            if (!dbname.isBlank() && !dbname.isEmpty() && dbname.charAt(dbname.length() - 1) == ';') {
-                dbname = dbname.substring(0, dbname.length() - 1);
-            }
+            String subQuery = query.replace("create database", "");
+            subQuery.trim();
+            String dbname = removeSemiColon(subQuery);
             System.out.println("dbname: "+ dbname);
             File theDir = new File("database_storage/"+dbname);
             if (!theDir.exists()){
@@ -31,5 +31,38 @@ public class QueryOperations {
         }
     }
 
+    //Method used for use database query
+    public String useDatabase(String query){
+        //implement pattern matcher
+        if(query.contains("use database")){
+            String subQuery = query.replace("use database", "");
+            subQuery.trim();
+            String dbname = removeSemiColon(subQuery);
+            System.out.println("dbname->"+ dbname);
+            String directoryPath  = "database_storage/"+dbname;
+            //System.out.println(directoryPath);
+            File theDir = new File(directoryPath);
+            if (theDir.exists()){
+                System.out.println("directory changed after use database query");
+                return directoryPath;
+            }else{
+                System.out.println("Database not present, please create database before using it");
+                return null;
+            }
+        }
+        return null;
+    }
+
+    // Generic Method for removing Semi Colon from end of the string
+    public static String removeSemiColon(String inputString){
+        String outputString = "";
+        if (!inputString.isBlank() && !inputString.isEmpty() && inputString.charAt(inputString.length() - 1) == ';') {
+            outputString = inputString.substring(0, inputString.length() - 1);
+        }
+        else {
+            outputString = inputString;
+        }
+        return outputString.trim();
+    }
 
 }
