@@ -13,9 +13,11 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class UserRegistration {
-    FileWriter fileWriter = new FileWriter("User_Profile.txt", true);
 
-    public UserRegistration() throws IOException {
+    private final Scanner scanner;
+
+    public UserRegistration(Scanner scanner) {
+        this.scanner = scanner;
     }
 
     private void registerUser(String username, String password, List<String> securityAnswers) {
@@ -31,16 +33,19 @@ public class UserRegistration {
         try (FileWriter fileWriter = new FileWriter("User_Profile.txt", true)) {
             StringBuilder builder = new StringBuilder();
 
-            builder.append(hashedUsername + " ")
-                    .append(hashedPassword + " ");
+            builder.append(hashedUsername)
+                    .append(" ")
+                    .append(hashedPassword)
+                    .append(" ");
 
             for (String answer : securityAnswers) {
-                builder.append(answer + " ");
+                builder.append(answer)
+                        .append(" ");
             }
 
             fileWriter.append(builder.toString());
-            fileWriter.append("\n");
-
+            fileWriter.append(System.lineSeparator());
+            System.out.println("User registered successfully");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,16 +70,13 @@ public class UserRegistration {
 
     public void register() throws IOException {
 
-        Scanner in = new Scanner(System.in);
         System.out.println("Enter username");
-        String username = in.nextLine();
+        String username = scanner.nextLine();
 
         System.out.println("Enter password");
-        String password = in.nextLine();
+        String password = scanner.nextLine();
 
         SecurityQuestion securityQuestion = SecurityQuestion.getInstance();
-
-
         Map<Integer, String> securityQuest = securityQuestion.getSecurityQuestion();
         ArrayList<String> securityAnswers = new ArrayList<>();
 
@@ -83,7 +85,7 @@ public class UserRegistration {
         for (Map.Entry<Integer, String> entryAnswer : securityQuest.entrySet()) {
 //            fileWriter.append((entryAnswer.getValue()));
             System.out.println(entryAnswer.getValue());
-            securityAnswers.add(in.nextLine());
+            securityAnswers.add(scanner.nextLine());
         }
         registerUser(username, password, securityAnswers);
     }

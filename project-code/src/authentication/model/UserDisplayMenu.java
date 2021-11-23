@@ -4,10 +4,15 @@ import java.util.Scanner;
 
 public class UserDisplayMenu {
 
+    private final Scanner scanner;
+
+    public UserDisplayMenu(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
     public void displayMainMenu() {
 
         System.out.println("User Menu");
-        Scanner scanner = null;
 
         while (true) {
             System.out.println("1. Write SQL Query.");
@@ -15,6 +20,7 @@ public class UserDisplayMenu {
             System.out.println("3. Generate ERD.");
             System.out.println("4. Generate Data Dictionary.");
             System.out.println("5. Import SQL Dump.");
+            System.out.println("6. Logout.");
 
             System.out.println("Choose an option:");
             String input = scanner.nextLine();
@@ -35,6 +41,9 @@ public class UserDisplayMenu {
                 case "5":
                     //"Import sql dump";
                     break;
+                case "6":
+                    Session.getInstance().logout();
+                    return;
                 default:
                     break;
             }

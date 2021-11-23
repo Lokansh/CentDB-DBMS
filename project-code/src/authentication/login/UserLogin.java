@@ -14,17 +14,19 @@ import java.util.Scanner;
 
 public class UserLogin {
 
-    public UserLogin() {
+    private final Scanner scanner;
+
+    public UserLogin(Scanner scanner) {
+        this.scanner = scanner;
     }
 
     public void login() {
-        Scanner in = new Scanner(System.in);
 
         System.out.println("Enter username");
-        String username = in.nextLine();
+        String username = scanner.nextLine();
 
         System.out.println("Enter password");
-        String password = in.nextLine();
+        String password = scanner.nextLine();
 
         SecurityQuestion securityQuestion = SecurityQuestion.getInstance();
 
@@ -33,7 +35,7 @@ public class UserLogin {
         String question = securityQuestion.getSecurityQuestion().get(questionIndex);
 
         System.out.println(question);
-        String securityAnswer = in.nextLine();
+        String securityAnswer = scanner.nextLine();
 
         login(username, password, questionIndex, securityAnswer);
     }

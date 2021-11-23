@@ -22,4 +22,12 @@ public final class Session {
     public void setUser(User user) {
         Session.user = user;
     }
+
+    public boolean isLoggedIn() {
+        return user != null;
+    }
+
+    public void logout() {
+        user = null;
+    }
 }
