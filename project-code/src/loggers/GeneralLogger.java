@@ -1,14 +1,14 @@
-package Logs;
+package loggers;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class GeneralLog {
+public class GeneralLogger {
     private static final String LOGS_DIRECTORY = "logs/";
     private static final String GENERAL_LOG_FILE_PATH = LOGS_DIRECTORY + "generalLog.txt";
 
-    public GeneralLog() {
+    public GeneralLogger() {
         init();
     }
 

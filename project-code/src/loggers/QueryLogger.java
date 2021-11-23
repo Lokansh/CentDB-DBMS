@@ -1,14 +1,14 @@
-package Logs;
+package loggers;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class EventLog {
+public class QueryLogger {
     private static final String LOGS_DIRECTORY = "logs/";
-    private static final String EVENT_LOG_FILE_PATH = LOGS_DIRECTORY + "eventLog.txt";
+    private static final String EVENT_LOG_FILE_PATH = LOGS_DIRECTORY + "queryLog.txt";
 
-    public EventLog() {
+    public QueryLogger() {
         init();
     }
 
@@ -21,9 +21,9 @@ public class EventLog {
 
 
     /*
-    String query_type, String database_name,
-                           String table_name, String column_affected, String row_affected,
-                           String constraint
+    String folder, String query_type, String database_name,
+                               String table_name, String column_affected, String row_affected,
+                               String constraint
 
      */
     private void logData(String executionTime, String dbState) {
