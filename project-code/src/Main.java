@@ -15,8 +15,8 @@ public class Main {
         System.out.println("Input query is:" + userArgument);
         QueryOperations obj = new QueryOperations();
         //obj.createDatabase(userArgument);
-        globalDBDirectoryPath = obj.useDatabase(userArgument);
-        System.out.println("globalDBDirectoryPath->" + globalDBDirectoryPath);
-
+        //globalDBDirectoryPath = obj.useDatabase(userArgument);
+        //System.out.println("globalDBDirectoryPath->" + globalDBDirectoryPath);
+        obj.selectTable(userArgument);
     }
 }
