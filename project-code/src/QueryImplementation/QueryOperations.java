@@ -70,7 +70,7 @@ public class QueryOperations {
     // select * from a.b;
     // select * from b;
     // select name,age from a.b;
-    public Boolean selectTable(String Query){
+    public Boolean selectTableQuery(String Query){
         String database = null;
         String table = null;
         String providedColumns = null;
@@ -78,13 +78,11 @@ public class QueryOperations {
 
         // Logic to extract table name and database name
         String tablename = removeSemiColon(Query.substring(Query.indexOf("from") + 4).trim());
-        System.out.println(tablename);
         if (tablename.contains(".")){
             database=tablename.split("\\.")[0];
             table=tablename.split("\\.")[1];
         }
         String tabledataStoragePath = dataStoragePath+database+"/"+table+"/";
-        System.out.println(tabledataStoragePath);
 
         // Logic to extract columns
         Pattern pattern = Pattern.compile("select(.*?)from", Pattern.DOTALL);
@@ -113,33 +111,50 @@ public class QueryOperations {
         return true;
     }
 
-    // Read data file
+    // Read and Process data file
     public List<String> readFile(String path, String columns) {
         try {
+            // initialization
+            String st;
+            List<Integer> indexList = new ArrayList<>();
             List<String> appendData = new ArrayList<>();
+
+            // read file through BufferedReader
             File file = new File(path);
             BufferedReader br = new BufferedReader(new FileReader(file));
-            String st;
-            // read header
+
+            // read header from file
             String header = br.readLine();
             List<String> headercolsList = Arrays.asList(header.split(","));
-            List<String> provColsList = Arrays.asList(columns.split(","));
             int fileColumnsLen = headercolsList.size();
-            int provColumnsLen = provColsList.size();
-            List<Integer> indexList = new ArrayList<>();
 
+            // read given columns
+            int provColumnsLen = fileColumnsLen;
+            List<String> provColsList = headercolsList;
+            if (!columns.equals("*")) {
+                provColsList = Arrays.asList(columns.split(","));
+                provColumnsLen = provColsList.size();
+            }
+
+            // if all columns not selected then below
+            // logic to get the respective index for which data is to be fetched
             if (provColumnsLen!=fileColumnsLen){
-                for(int i=0;i<provColumnsLen;i++){
-                    int index = headercolsList.indexOf(provColsList.get(i));
+                for (String s : provColsList) {
+                    int index = headercolsList.indexOf(s);
                     indexList.add(index);
                 }
+                // adding header
+                appendData.add(columns);
             }
-            else {
-                // for all columns
+            else {  // for all columns
                 for(int i=0;i<headercolsList.size();i++){
                     indexList.add(i);
                 }
+                // adding header
+                appendData.add(header);
             }
+
+            // Reading file data separated by line into list
             while ((st = br.readLine()) != null) {
                 String[] splitSt = st.split(",");
                 String reqString = "";

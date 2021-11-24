@@ -17,6 +17,6 @@ public class Main {
         //obj.createDatabase(userArgument);
         //globalDBDirectoryPath = obj.useDatabase(userArgument);
         //System.out.println("globalDBDirectoryPath->" + globalDBDirectoryPath);
-        obj.selectTable(userArgument);
+        obj.selectTableQuery(userArgument);
     }
 }
