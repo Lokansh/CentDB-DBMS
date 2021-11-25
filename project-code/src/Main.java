@@ -17,6 +17,7 @@ public class Main {
         //obj.createDatabase(userArgument);
         globalDBDirectoryPath = obj.useDatabase(userArgument);
         System.out.println("globalDBDirectoryPath->" + globalDBDirectoryPath);
+        obj.createSchema("create table table1 (id int(10),name varchar(25));",globalDBDirectoryPath);
 
     }
 }

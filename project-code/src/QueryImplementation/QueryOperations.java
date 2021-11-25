@@ -1,8 +1,8 @@
 package QueryImplementation;
 
-import com.sun.tools.javac.Main;
-
+import javax.imageio.IIOException;
 import java.io.File;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class QueryOperations {
@@ -30,6 +30,12 @@ public class QueryOperations {
             return false;
         }
     }
+    public boolean createSchema(String query, String path) throws IOException {
+        if(query.contains("create table")){
+            SchemaCreation.schemaCreation(query,path);
+        }
+        return true;
+    }
 
     //Method used for use database query
     public String useDatabase(String query){
@@ -54,7 +60,7 @@ public class QueryOperations {
     }
 
     // Generic Method for removing Semi Colon from end of the string
-    public static String removeSemiColon(String inputString){
+public static String removeSemiColon(String inputString){
         String outputString = "";
         if (!inputString.isBlank() && !inputString.isEmpty() && inputString.charAt(inputString.length() - 1) == ';') {
             outputString = inputString.substring(0, inputString.length() - 1);
@@ -64,5 +70,6 @@ public class QueryOperations {
         }
         return outputString.trim();
     }
+
 
 }
