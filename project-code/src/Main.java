@@ -1,4 +1,6 @@
+import QueryImplementation.InsertQuery;
 import QueryImplementation.QueryOperations;
+import QueryImplementation.UseQuery;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -15,21 +17,23 @@ public class Main {
         userArgument = userArgument.trim();
         System.out.println("Input query is:" + userArgument);
 
- globalDBDirectoryPath = obj.useDatabase(userArgument);
+        QueryOperations obj = new QueryOperations();
+        UseQuery useQueryObj = new UseQuery();
+        globalDBDirectoryPath = useQueryObj.useDatabase(userArgument);
         System.out.println("globalDBDirectoryPath->" + globalDBDirectoryPath);
         obj.createSchema("create table table1 (id int(10),name varchar(25));",globalDBDirectoryPath);
         // obj.selectTableQuery(userArgument);
 
 
-        QueryOperations obj = new QueryOperations();
         //obj.createDatabase(userArgument);
-        globalDBDirectoryPath = obj.useDatabase(userArgument);
+        globalDBDirectoryPath = useQueryObj.useDatabase(userArgument);
         System.out.println("globalDBDirectoryPath->" + globalDBDirectoryPath);
 
         System.out.println("Enter Insert query-------");
         String userArgument2 = s.nextLine();
 
-        obj.insertQuery(userArgument2,globalDBDirectoryPath);
+        InsertQuery insertQueryObj = new InsertQuery();
+        insertQueryObj.insertQuery(userArgument2,globalDBDirectoryPath);
 
         //obj.selectTableQuery(userArgument);
         
