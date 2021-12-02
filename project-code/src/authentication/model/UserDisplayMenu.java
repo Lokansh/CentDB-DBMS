@@ -20,7 +20,7 @@ public class UserDisplayMenu {
             System.out.println("1. Write SQL Query.");
             System.out.println("2. Generate ERD.");
             System.out.println("3. Generate Data Dictionary.");
-            System.out.println("4. Import SQL Dump.");
+            System.out.println("4. Export SQL Dump.");
             System.out.println("5. Logout.");
 
             System.out.println("Choose an option:");
@@ -29,7 +29,7 @@ public class UserDisplayMenu {
             switch (input) {
                 case "1":
                     //"write sql query";
-                    QueryExecutor qobj = new QueryExecutor();
+                    QueryExecutor qobj = new QueryExecutor(scanner);
                     qobj.queryExecute();
                     break;
                 case "2":
