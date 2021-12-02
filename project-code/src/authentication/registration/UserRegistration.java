@@ -3,10 +3,7 @@ package authentication.registration;
 import authentication.SecurityQuestion;
 import authentication.utils.HashingService;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +11,7 @@ import java.util.Scanner;
 
 public class UserRegistration {
 
+    private final static String USER_PROFILE_FILE_PATH = "User_Profile.txt";
     private final Scanner scanner;
 
     public UserRegistration(Scanner scanner) {
@@ -52,7 +50,13 @@ public class UserRegistration {
     }
 
     private boolean checkUserExists(String username) {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("User_Profile.txt"))) {
+        File userProfile = new File(USER_PROFILE_FILE_PATH);
+
+        if (!userProfile.exists()) {
+            return false;
+        }
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userProfile))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] userDetails = line.split(" ");
@@ -68,7 +72,7 @@ public class UserRegistration {
         return false;
     }
 
-    public void register() throws IOException {
+    public void register() {
 
         System.out.println("Enter username");
         String username = scanner.nextLine();
@@ -83,7 +87,6 @@ public class UserRegistration {
         //Referred URL : https://www.baeldung.com/java-map-entry
         //Printing all our security questions(keys) and answers(value) in the file
         for (Map.Entry<Integer, String> entryAnswer : securityQuest.entrySet()) {
-//            fileWriter.append((entryAnswer.getValue()));
             System.out.println(entryAnswer.getValue());
             securityAnswers.add(scanner.nextLine());
         }

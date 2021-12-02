@@ -8,13 +8,18 @@ public class QueryExecutor {
 
     public static String globalDBDirectoryPath = "";    //Static global database directory address
 
+    private final Scanner scanner;
+
+    public QueryExecutor(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
     public void queryExecute(){
         try {
             // accept user input
             String userArgument = null;
-            Scanner s = new Scanner(System.in);
             System.out.println("Enter Query-------");
-            userArgument = s.nextLine();
+            userArgument = scanner.nextLine();
             userArgument = userArgument.trim();
             System.out.println("Input query is:" + userArgument);
 
@@ -53,7 +58,7 @@ public class QueryExecutor {
             Matcher insertMatcher = insertPattern.matcher(userArgument);
             if (insertMatcher.find()) {
                 System.out.println(insertMatcher.group(0).trim());
-                String userArgument2 = s.nextLine();
+                String userArgument2 = scanner.nextLine();
 
                 InsertQuery insertQueryObj = new InsertQuery();
                 insertQueryObj.insertQuery(userArgument2, globalDBDirectoryPath);
