@@ -1,6 +1,6 @@
 import QueryImplementation.InsertQuery;
 import QueryImplementation.QueryOperations;
-import QueryImplementation.UpdateQueryOperation;
+import QueryImplementation.UpdateQuery;
 import QueryImplementation.UseQuery;
 
 import java.io.IOException;
@@ -74,7 +74,7 @@ public class Main {
         Matcher updateMatcher = updatePattern.matcher(userArgument);
         if (updateMatcher.find()) {
             System.out.println(updateMatcher.group(0).trim());
-            UpdateQueryOperation updateObj = new UpdateQueryOperation();
+            UpdateQuery updateObj = new UpdateQuery();
             updateObj.updateQuery(userArgument, globalDBDirectoryPath);
         }
 

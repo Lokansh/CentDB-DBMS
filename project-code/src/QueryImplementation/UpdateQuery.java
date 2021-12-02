@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UpdateQueryOperation {
+public class UpdateQuery {
     final String dataStoragePath = "database_storage/";
 
     // update table db1.tb1 set name="updated" where id=1
