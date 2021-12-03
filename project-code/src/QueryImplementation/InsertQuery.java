@@ -8,12 +8,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class InsertQuery {
+    private String dataStoragePath = "database_storage/";
 
     //insert query
     //insert into table values ()
     public Boolean insertQuery(String query, String directoryPath) throws IOException {
         String tableName = "";
         String columnValues = "";
+        String onlyTableName = "";
+        String database = "";
+        String tablePath;
 
         //Validate query logic
         //Regex needs to written
@@ -28,12 +32,22 @@ public class InsertQuery {
             System.out.println("Not an Insert query");
             return false;
         }
-        System.out.println("tableName ->" + tableName);
-        System.out.println("directoryPath ->" + directoryPath);
-        String tablePath = directoryPath + "/" + tableName + ".txt";
+
+        if (tableName.contains(".")){
+            database=tableName.split("\\.")[0];
+            onlyTableName=tableName.split("\\.")[1];
+            tablePath = dataStoragePath + database + "/" + onlyTableName + "/";
+        }
+        else{
+            System.out.println("directoryPath ->" + directoryPath);
+            tablePath = directoryPath + "/" + tableName;
+        }
+
+        System.out.println("tablePath ->" + tablePath);
+
         File filePath = new File(tablePath);
 
-        if (!tableName.isEmpty() && !directoryPath.isEmpty()){
+        if (!tableName.isEmpty() || !onlyTableName.isEmpty()){
             System.out.println("tablePath->" + tablePath);
 
             Boolean fileExist = filePath.isFile();

@@ -55,10 +55,10 @@ public class Main {
         Matcher insertMatcher = insertPattern.matcher(userArgument);
         if (insertMatcher.find()) {
             System.out.println(insertMatcher.group(0).trim());
-            String userArgument2 = s.nextLine();
+            //String userArgument2 = s.nextLine();
 
             InsertQuery insertQueryObj = new InsertQuery();
-            insertQueryObj.insertQuery(userArgument2,globalDBDirectoryPath);
+            insertQueryObj.insertQuery(userArgument,globalDBDirectoryPath);
         }
 
         // Pattern Matcher for SELECT
