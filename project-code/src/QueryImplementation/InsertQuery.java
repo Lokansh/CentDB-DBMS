@@ -23,8 +23,7 @@ public class InsertQuery {
             String tempString = QueryOperations.removeSemiColon(query.substring(query.indexOf("into") + 4));
             String[] tempArray = tempString.split(" ");
             tableName = tempArray[0];
-        }
-        else{
+        } else {
             System.out.println("Not an Insert query");
             return false;
         }
@@ -33,24 +32,21 @@ public class InsertQuery {
         String tablePath = directoryPath + "/" + tableName; //+ ".txt";
         File filePath = new File(tablePath);
 
-        if (!tableName.isEmpty() && !directoryPath.isEmpty()){
+        if (!tableName.isEmpty() && !directoryPath.isEmpty()) {
             System.out.println("tablePath->" + tablePath);
 
             Boolean fileExist = filePath.isFile();
-            if(fileExist){
+            if (fileExist) {
                 System.out.println("Table exist");
-            }
-            else{
+            } else {
                 Boolean fileCreatedSuccess = filePath.createNewFile();
                 System.out.println("Table does not exist so table file created -->" + fileCreatedSuccess);
             }
             System.out.println("File created or file exists operation complete");
-        }
-        else if(directoryPath.isEmpty()){
+        } else if (directoryPath.isEmpty()) {
             System.out.println("Database not selected, please select database before inserting any values");
             return false;
-        }
-        else if(tableName.isEmpty()){
+        } else if (tableName.isEmpty()) {
             System.out.println("Wrong query entered, please re-check");
             return false;
         }

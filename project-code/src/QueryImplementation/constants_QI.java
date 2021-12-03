@@ -1,7 +1,7 @@
 package QueryImplementation;
 
 public class constants_QI {
-    final String a="abc";
+    final String a = "abc";
     final String UPD_QUERY_DBTB_NAME = "(?<=update table\\s).*(?=\\sset)";
     final String SET_CLAUSE = "(?<=set\\s).*(?=\\swhere)";
     final String WHERE_CLAUSE = "(?<=where\\s).*";
@@ -16,5 +16,6 @@ public class constants_QI {
     final String UPDATE_TB = "^update table.*$";
     final String DELETE_ROW = "^delete.*$";
     final String DROP_TB = "^drop table.*$";
+    final String START_TRANSACTION = "^start transaction\\s*;$";
 
 }
