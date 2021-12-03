@@ -23,8 +23,6 @@ public class StartTransactionQuery {
         String realDatabasePath = DatabaseService.getRootDatabaseFolderPath() + selectedDatabase;
         String tempDatabasePath = DatabaseService.getTempDatabaseFolderPath() + selectedDatabase;
 
-        DatabaseService.CURRENT_DATABASE_PATH = tempDatabasePath;
-
         File tempDatabase = new File(tempDatabasePath);
 
 //        TODO: REPLACE WITH DELETE DATABASE;
@@ -50,10 +48,12 @@ public class StartTransactionQuery {
                     Files.copy(sourcePath, destPath);
                 } catch (Exception e) {
                     e.printStackTrace();
-//                        TODO: perform rollback
+                    new RollbackQuery().rollbackTransaction();
                     return;
                 }
             }
+            DatabaseService.CURRENT_DATABASE_PATH = tempDatabasePath;
+            DatabaseService.isTransactionRunning = true;
             System.out.println("Transaction active for database " + selectedDatabase);
         } else {
             System.out.println("Could not start transaction. Please try again");

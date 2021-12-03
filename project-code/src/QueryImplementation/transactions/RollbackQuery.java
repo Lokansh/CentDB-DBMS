@@ -6,29 +6,41 @@ import java.io.File;
 
 public class RollbackQuery {
 
-    private void  rollbackTransaction() {
+    public void rollbackTransaction() {
 
-        final String realDB = DatabaseService.CURRENT_DATABASE_PATH;// + this.useDatabaseName;
-        final File tempDB = new File(realDB);
-        final boolean dbExists = tempDB.isDirectory();
+        if (!DatabaseService.isTransactionRunning) {
+            System.out.println("No transaction running. Please start a transaction first");
+            return;
+        }
+
+        String selectedDatabase = new File(DatabaseService.CURRENT_DATABASE_PATH).getName();
+        String tempDatabasePath = DatabaseService.getTempDatabaseFolderPath() + selectedDatabase;
+        String realDatabasePath = DatabaseService.getRootDatabaseFolderPath() + selectedDatabase;
+
+        File tempDatabase = new File(tempDatabasePath);
+        boolean dbExists = tempDatabase.isDirectory();
         if (!dbExists) {
-            System.out.println("Error: Database " + tempDB + " does not exists!");
+            System.out.println("Database " + tempDatabase + " does not exist!");
+            return;
         }
-        final File[] dbTables = tempDB.listFiles();
+        File[] dbTables = tempDatabase.listFiles();
         if (dbTables == null) {
-            System.out.println("Error: Database " + tempDB + " failed to delete!" );
+            System.out.println("Database " + tempDatabase + " failed to delete!");
+            return;
         }
-        for (final File table : dbTables) {
-            final boolean tableDelete = table.delete();
+        for (File table : dbTables) {
+            boolean tableDelete = table.delete();
             if (!tableDelete) {
-                System.out.println("Error: Failed to delete tables of the database " + tempDB + " Please try again!" );
+                System.out.println("Failed to delete tables of the database " + tempDatabase + " Please try again!");
             }
         }
-        final boolean dbDelete= tempDB.delete();
+        boolean dbDelete = tempDatabase.delete();
         if (dbDelete) {
-            System.out.println("Transaction rollback!" );
+            DatabaseService.CURRENT_DATABASE_PATH = realDatabasePath;
+            DatabaseService.isTransactionRunning = false;
+            System.out.println("Transaction rollback successful!");
         } else {
-            System.out.println("Error: Database " + tempDB + " deletion error!");
+            System.out.println("Error: Database " + tempDatabase + " deletion error!");
         }
     }
 

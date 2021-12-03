@@ -1,5 +1,6 @@
 package QueryImplementation;
 
+import QueryImplementation.transactions.RollbackQuery;
 import QueryImplementation.transactions.StartTransactionQuery;
 
 import java.util.Scanner;
@@ -102,7 +103,13 @@ public class QueryExecutor {
             if (startTransactionMatcher.find()) {
                 StartTransactionQuery startTransactionQuery = new StartTransactionQuery();
                 startTransactionQuery.startTransaction();
-//                System.out.println(deleteMatcher.group(0).trim());
+            }
+
+            Pattern rollbackTransactionPattern = Pattern.compile(cons.ROLLBACK_TRANSACTION, Pattern.CASE_INSENSITIVE);
+            Matcher rollbackTransactionMatcher = rollbackTransactionPattern.matcher(userArgument);
+            if (rollbackTransactionMatcher.find()) {
+                RollbackQuery rollbackQuery = new RollbackQuery();
+                rollbackQuery.rollbackTransaction();
             }
         } catch (Exception e) {
             e.getStackTrace();
