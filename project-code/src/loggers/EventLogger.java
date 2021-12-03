@@ -41,7 +41,6 @@ public class EventLogger {
             e.printStackTrace();
         }
     }
-
     public void log(String executionTime, String dbState) {
         logData(executionTime, dbState);
     }
