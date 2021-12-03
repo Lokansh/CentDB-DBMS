@@ -10,7 +10,7 @@ public class UpdateQuery {
     final String dataStoragePath = "database_storage/";
 
     // update table db1.tb1 set name="updated" where id=1
-    public void updateQuery(String Query, String globalPath){
+    public void updateQuery(String Query, String globalPath) {
         constants_QI constant = new constants_QI();
         String line;
         String filterColumn = null;
@@ -29,19 +29,19 @@ public class UpdateQuery {
                 // extract set clause
                 Pattern setPattern = Pattern.compile(constant.SET_CLAUSE, Pattern.DOTALL);
                 Matcher setMatcher = setPattern.matcher(Query);
-                if (setMatcher.find()){
+                if (setMatcher.find()) {
                     updateColumn = setMatcher.group(0).trim().split(constant.EQUAL_OPR)[0];
-                    updateValue = setMatcher.group(0).trim().split(constant.EQUAL_OPR)[1].replaceAll("\"","");
+                    updateValue = setMatcher.group(0).trim().split(constant.EQUAL_OPR)[1].replaceAll("\"", "");
                 }
 
                 // extract where clause
                 Pattern wherePattern = Pattern.compile(constant.WHERE_CLAUSE, Pattern.DOTALL);
                 Matcher whereMatcher = wherePattern.matcher(Query);
-                if (whereMatcher.find()){
+                if (whereMatcher.find()) {
                     filterColumn = whereMatcher.group(0).trim().split(constant.EQUAL_OPR)[0];
                     filterValue = whereMatcher.group(0).trim().split(constant.EQUAL_OPR)[1]
-                            .replaceAll("\"","").replaceAll("'","")
-                            .replace(";","");
+                            .replaceAll("\"", "").replaceAll("'", "")
+                            .replace(";", "");
                 }
 
                 if (dbTBMatcher.find()) {
@@ -50,7 +50,7 @@ public class UpdateQuery {
                     String databaseName = extractedStr.split(constant.DOT_OPR)[0];
                     String tableName = dbTBMatcher.group(0).trim().split(constant.DOT_OPR)[1];
                     String updatePAth = dataStoragePath + databaseName + "/" + tableName;
-                    String tempPath = dataStoragePath + databaseName + "/" + tableName+"_temp";
+                    String tempPath = dataStoragePath + databaseName + "/" + tableName + "_temp";
 
                     int indexFilterCol = 0;
                     int updateColIndex = 0;
@@ -73,7 +73,7 @@ public class UpdateQuery {
                                 // row data's
                                 rowCounter++;
                                 String extractedValueOfRow = line.split(constant.COMMA_OPR)[indexFilterCol];
-                                if (extractedValueOfRow.equals(filterValue)){               // check if filter matches
+                                if (extractedValueOfRow.equals(filterValue)) {               // check if filter matches
                                     // this is the row that is to be updated
                                     ArrayList<String> namesList = new ArrayList<>(Arrays.asList(line.split(constant.COMMA_OPR)));
                                     String oldValue = namesList.get(updateColIndex);        // for loggers
@@ -81,8 +81,7 @@ public class UpdateQuery {
                                     String listString = String.join(constant.COMMA_OPR, namesList);
                                     bw.append(listString);
                                     bw.newLine();
-                                }
-                                else {
+                                } else {
                                     bw.append(line);
                                     bw.newLine();
                                 }

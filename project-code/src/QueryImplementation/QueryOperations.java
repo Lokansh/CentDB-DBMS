@@ -1,5 +1,7 @@
 package QueryImplementation;
 
+import services.DatabaseService;
+
 import javax.imageio.IIOException;
 
 import java.io.*;
@@ -214,4 +216,5 @@ public class QueryOperations {
         } catch (IOException e) {System.out.println(Arrays.toString(e.getStackTrace()));}
         return null;
     }
+
 }

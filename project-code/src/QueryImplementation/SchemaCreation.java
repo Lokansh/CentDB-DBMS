@@ -1,17 +1,14 @@
 package QueryImplementation;
 
-import com.sun.tools.javac.Main;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-//import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SchemaCreation {
-    public static boolean schemaCreation(String query,String path) throws IOException{
+    public static boolean schemaCreation(String query, String path) throws IOException{
         String tableName = null;
         String directoryPath = path;
         //.*create\s+table\s+(.*?)($|\s+)

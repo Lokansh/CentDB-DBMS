@@ -1,5 +1,7 @@
 package QueryImplementation;
 
+import QueryImplementation.transactions.StartTransactionQuery;
+
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +16,7 @@ public class QueryExecutor {
         this.scanner = scanner;
     }
 
-    public void queryExecute(){
+    public void queryExecute() {
         try {
             // accept user input
             String userArgument = null;
@@ -94,6 +96,16 @@ public class QueryExecutor {
             if (dropMatcher.find()) {
                 System.out.println(dropMatcher.group(0).trim());
             }
-        } catch (Exception e) {e.getStackTrace();}
+
+            Pattern startTransactionPattern = Pattern.compile(cons.START_TRANSACTION, Pattern.CASE_INSENSITIVE);
+            Matcher startTransactionMatcher = startTransactionPattern.matcher(userArgument);
+            if (startTransactionMatcher.find()) {
+                StartTransactionQuery startTransactionQuery = new StartTransactionQuery();
+                startTransactionQuery.startTransaction();
+//                System.out.println(deleteMatcher.group(0).trim());
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
     }
 }
