@@ -1,12 +1,15 @@
 package QueryImplementation.transactions;
 
 import services.DatabaseService;
+import services.TableService;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StartTransactionQuery {
 
@@ -16,32 +19,57 @@ public class StartTransactionQuery {
             return;
         }
 
-        String realDatabase = DatabaseService.CURRENT_DATABASE_PATH;
-        String databaseName = realDatabase.substring(realDatabase.lastIndexOf("/") + 1);
-        String tempDatabase = DatabaseService.TEMP_DATABASE_FOLDER_PATH + databaseName;
+        String selectedDatabase = new File(DatabaseService.CURRENT_DATABASE_PATH).getName();
+        String realDatabasePath = DatabaseService.getRootDatabaseFolderPath() + selectedDatabase;
+        String tempDatabasePath = DatabaseService.getTempDatabaseFolderPath() + selectedDatabase;
 
-        DatabaseService.CURRENT_DATABASE_PATH = tempDatabase;
+        DatabaseService.CURRENT_DATABASE_PATH = tempDatabasePath;
 
-        final File tempDB = new File(tempDatabase);
-        if (tempDB.mkdir()) {
-            final File realDB = new File(realDatabase);
-            final File[] realDBTables = realDB.listFiles();
-            if (realDBTables == null) {
-                System.out.println("Tables doesn't exists. Transaction can't start.");
+        File tempDatabase = new File(tempDatabasePath);
+
+//        TODO: REPLACE WITH DELETE DATABASE;
+        deleteDatabase_REMOVEME(tempDatabase);
+
+        if (tempDatabase.mkdirs()) {
+            File realDatabase = new File(realDatabasePath);
+            File[] potentialTables = realDatabase.listFiles();
+            List<File> tables = null;
+            if (potentialTables != null) {
+                tables = Arrays.stream(potentialTables).filter(TableService::isTable).collect(Collectors.toList());
             }
-            for (final File table : realDBTables) {
-                final Path src = Paths.get(realDatabase + table.getName());
-                final Path dest = Paths.get(tempDatabase + table.getName());
+
+            if (tables == null) {
+                System.out.println("Database is empty. Transaction can't start.");
+                return;
+            }
+
+            for (File table : tables) {
+                Path sourcePath = Paths.get(realDatabase + "/" + table.getName());
+                Path destPath = Paths.get(tempDatabasePath + "/" + table.getName());
                 try {
-                    Files.copy(src, dest);
-                } catch (final IOException e) {
-                    System.out.println(e);
+                    Files.copy(sourcePath, destPath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+//                        TODO: perform rollback
+                    return;
                 }
             }
-            System.out.printf("Transaction started for database");
+            System.out.println("Transaction active for database " + selectedDatabase);
         } else {
-            System.out.println("Transaction execution failed");
+            System.out.println("Could not start transaction. Please try again");
         }
+    }
+
+    private static void deleteDatabase_REMOVEME(File database) {
+        if (database.isDirectory()) {
+            File[] files = database.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    file.delete();
+                }
+            }
+        }
+        database.delete();
     }
 
 }
