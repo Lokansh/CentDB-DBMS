@@ -27,7 +27,7 @@ public class EventLogger {
                            String constraint
 
      */
-    public static void eventLogData(String executionTime, Instant dbState) {
+    public static void eventLogData(String executionTime, Instant timestamp) {
         File generalLog = new File(EVENT_LOG_FILE_PATH);
         boolean generalLogExists = generalLog.exists();
 
@@ -36,13 +36,13 @@ public class EventLogger {
             if (!generalLogExists) {
                 writer.append("DB State | Execution Time\n");
             }
-            String queryLog = executionTime + " | " + dbState;
+            String queryLog = executionTime + " | " + timestamp;
             writer.append(queryLog).append("\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void log(String executionTime, String dbState) {
-        eventLogData(executionTime, dbState);
+    public void log(String executionTime, Instant timestamp) {
+        eventLogData(executionTime, timestamp);
     }
 }

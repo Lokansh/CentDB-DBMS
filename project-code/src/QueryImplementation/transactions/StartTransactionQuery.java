@@ -21,6 +21,7 @@ public class StartTransactionQuery {
         Instant instant = Instant.now();
 
         if (DatabaseService.CURRENT_DATABASE_PATH == null) {
+            System.out.println("No database selected");
             String eventMessage = "No database selected" + " | " +
                     "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
@@ -45,6 +46,7 @@ public class StartTransactionQuery {
             }
 
             if (tables == null) {
+                System.out.println("Database is empty. Transaction can't start");
                 String eventMessage = "Database is empty. Transaction can't start" + " | " +
                         "Time of Execution: " +  instant + "ms";
                 EventLogger.eventLogData(eventMessage, instant);
@@ -70,6 +72,7 @@ public class StartTransactionQuery {
                     "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
         } else {
+            System.out.println("Could not start transaction. Please try again");
             String eventMessage = "Could not start transaction. Please try again"+ " | " +
                     "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);

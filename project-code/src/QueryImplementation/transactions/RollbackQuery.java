@@ -14,6 +14,7 @@ public class RollbackQuery {
         Instant instant = Instant.now();
 
         if (!DatabaseService.isTransactionRunning) {
+            System.out.println("No transaction running. Please start a transaction first");
             String eventMessage = "No transaction running. Please start a transaction first" + " | " +
                     "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
@@ -27,6 +28,7 @@ public class RollbackQuery {
         File tempDatabase = new File(tempDatabasePath);
         boolean dbExists = tempDatabase.isDirectory();
         if (!dbExists) {
+            System.out.println("Database "  + tempDatabase +  "does not exist" );
             String eventMessage = "Database "  + tempDatabase +  "does not exist" + " | " +
                     "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
@@ -34,6 +36,7 @@ public class RollbackQuery {
         }
         File[] dbTables = tempDatabase.listFiles();
         if (dbTables == null) {
+            System.out.println("Failed to delete database :" + tempDatabase + " failed to delete");
             String eventMessage = "Failed to delete database :" + tempDatabase + " failed to delete" + " | " +
                     "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
@@ -42,6 +45,7 @@ public class RollbackQuery {
         for (File table : dbTables) {
             boolean tableDelete = table.delete();
             if (!tableDelete) {
+                System.out.println("Failed to delete tables of the database :" + tempDatabase );
                 String eventMessage = "Failed to delete tables of the database :" + tempDatabase + " | " +
                         "Time of Execution: " +  instant + "ms";
                 EventLogger.eventLogData(eventMessage, instant);
@@ -52,10 +56,12 @@ public class RollbackQuery {
         if (dbDelete) {
             DatabaseService.CURRENT_DATABASE_PATH = realDatabasePath;
             DatabaseService.isTransactionRunning = false;
+            System.out.println("Transaction rollback is successful");
             String eventMessage = "Transaction rollback is successful" + " | " +
                     "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
         } else {
+            System.out.println("There is error while deleting database :" + tempDatabase);
             String eventMessage = "There is error while deleting database :" + tempDatabase + " | " +
                     "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
