@@ -10,10 +10,11 @@ import java.util.stream.Stream;
 
 public class DatabaseService {
 
-    public static final String ROOT_DATABASE_FOLDER_PATH = "database_storage/";
-    public static final String TEMP_DATABASE_FOLDER_PATH = "temp_database/";
-    public static String CURRENT_DATABASE_PATH = null;
+    private static final String ROOT_DATABASE_FOLDER_PATH = "database_storage/";
+    private static final String TEMP_DATABASE_FOLDER_PATH = "temp_database/";
 
+    public static boolean isTransactionRunning = false;
+    public static String CURRENT_DATABASE_PATH = null;
 
     public List<Path> getAllDatabases() {
         List<Path> databases = null;
@@ -27,5 +28,13 @@ public class DatabaseService {
             e.printStackTrace();
         }
         return databases;
+    }
+
+    public static String getRootDatabaseFolderPath() {
+        return ROOT_DATABASE_FOLDER_PATH;
+    }
+
+    public static String getTempDatabaseFolderPath() {
+        return TEMP_DATABASE_FOLDER_PATH;
     }
 }
