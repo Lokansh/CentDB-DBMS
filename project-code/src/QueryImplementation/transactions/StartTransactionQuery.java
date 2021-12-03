@@ -17,10 +17,12 @@ import java.util.stream.Collectors;
 public class StartTransactionQuery {
 
     public void startTransaction() throws ExceptionHandler {
+
         Instant instant = Instant.now();
+
         if (DatabaseService.CURRENT_DATABASE_PATH == null) {
             String eventMessage = "No database selected" + " | " +
-                    "Execution Time: " +  instant + "ms";
+                    "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
             throw new ExceptionHandler(eventMessage);
            // return;
@@ -44,7 +46,7 @@ public class StartTransactionQuery {
 
             if (tables == null) {
                 String eventMessage = "Database is empty. Transaction can't start" + " | " +
-                        "Execution Time: " +  instant + "ms";
+                        "Time of Execution: " +  instant + "ms";
                 EventLogger.eventLogData(eventMessage, instant);
                 throw new ExceptionHandler(eventMessage);
                 //return;
@@ -65,11 +67,11 @@ public class StartTransactionQuery {
             DatabaseService.isTransactionRunning = true;
             System.out.println("Transaction active for database " + selectedDatabase);
             String eventMessage = "Transaction active for database " + selectedDatabase + " | " +
-                    "Execution Time: " +  instant + "ms";
+                    "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
         } else {
             String eventMessage = "Could not start transaction. Please try again"+ " | " +
-                    "Execution Time: " +  instant + "ms";
+                    "Time of Execution: " +  instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
             throw new ExceptionHandler(eventMessage);
         }
