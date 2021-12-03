@@ -1,5 +1,6 @@
 package QueryImplementation;
 
+import QueryImplementation.transactions.CommitTransactionQuery;
 import QueryImplementation.transactions.RollbackQuery;
 import QueryImplementation.transactions.StartTransactionQuery;
 
@@ -110,6 +111,13 @@ public class QueryExecutor {
             if (rollbackTransactionMatcher.find()) {
                 RollbackQuery rollbackQuery = new RollbackQuery();
                 rollbackQuery.rollbackTransaction();
+            }
+
+            Pattern commitTransactionPattern = Pattern.compile(cons.COMMIT_TRANSACTION, Pattern.CASE_INSENSITIVE);
+            Matcher commitTransactionMatcher = commitTransactionPattern.matcher(userArgument);
+            if (commitTransactionMatcher.find()) {
+                CommitTransactionQuery commitTransactionQuery = new CommitTransactionQuery();
+                commitTransactionQuery.commitTransaction();
             }
         } catch (Exception e) {
             e.getStackTrace();

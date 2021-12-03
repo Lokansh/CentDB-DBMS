@@ -1,83 +1,129 @@
 package QueryImplementation.transactions;
 
-import java.io.File;
+import QueryImplementation.ExceptionHandler;
+import loggers.EventLogger;
 import services.DatabaseService;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 
 public class CommitTransactionQuery {
 
-    public void commitTransaction() {
+    public void commitTransaction() throws ExceptionHandler {
+
+        Instant instant = Instant.now();
+
+        if (!DatabaseService.isTransactionRunning) {
+            System.out.println("No transaction running. Please start a transaction first");
+            String eventMessage = "No transaction running" + " | " +
+                    "Time of Execution: " + instant + "ms";
+            EventLogger.eventLogData(eventMessage, instant);
+            throw new ExceptionHandler(eventMessage);
+        }
 
         String selectedDatabase = new File(DatabaseService.CURRENT_DATABASE_PATH).getName();
         String realDatabasePath = DatabaseService.getRootDatabaseFolderPath() + selectedDatabase;
         String tempDatabasePath = DatabaseService.getTempDatabaseFolderPath() + selectedDatabase;
 
         File tempDatabase = new File(tempDatabasePath);
-      //  DatabaseService.CURRENT_DATABASE_PATH = tempDatabase;
+        boolean tempDatabaseExists = tempDatabase.isDirectory();
 
-        final String inMemoryDatabasePath = DatabaseService.CURRENT_DATABASE_PATH ;//+ "/" + this.useDatabaseName + "/";
-        final File inMemoryDatabase = new File(inMemoryDatabasePath);
-        final boolean isInMemoryDatabaseExists = inMemoryDatabase.isDirectory();
-
-        if (!isInMemoryDatabaseExists) {
-            System.out.println("Error: Database " + inMemoryDatabase + " does not exists!");
-
-        }
-        final String inServerDatabasePath = DatabaseService.CURRENT_DATABASE_PATH;// + "/" + this.useDatabaseName + "/";
-        final File inServerDatabase = new File(inServerDatabasePath);
-        final boolean isInServerDatabaseExists = inServerDatabase.isDirectory();
-        if (!isInServerDatabaseExists) {
-            System.out.println("Error: Database does not exists");
+        if (!tempDatabaseExists) {
+            System.out.println("Database " + tempDatabase + " does not exists!");
+            String eventMessage = "Temporary Database " + tempDatabase + " does not exists!" + " | " +
+                    "Time of Execution: " + instant + "ms";
+            EventLogger.eventLogData(eventMessage, instant);
+            throw new ExceptionHandler(eventMessage);
         }
 
-        final File[] allTables = inServerDatabase.listFiles();
+        File realDatabase = new File(realDatabasePath);
+        boolean realDatabaseExists = realDatabase.isDirectory();
+        if (!realDatabaseExists) {
+            System.out.println("Database does not exists");
+            String eventMessage = "Real Database " + realDatabase + " does not exists!" + " | " +
+                    "Time of Execution: " + instant + "ms";
+            EventLogger.eventLogData(eventMessage, instant);
+            throw new ExceptionHandler(eventMessage);
+        }
+
+        File[] allTables = realDatabase.listFiles();
         if (allTables == null) {
-            System.out.println("Error: Database failed to delete!");
+            System.out.println("Database is empty!");
+            String eventMessage = "Database " + realDatabase + " is empty!" + " | " +
+                    "Time of Execution: " + instant + "ms";
+            EventLogger.eventLogData(eventMessage, instant);
+            throw new ExceptionHandler(eventMessage);
         }
-        for (final File table : allTables) {
-            final boolean isTableDeleted = table.delete();
+        for (File table : allTables) {
+            boolean isTableDeleted = table.delete();
             if (!isTableDeleted) {
-                System.out.println("Error: Failed to delete tables of the database ");
+                System.out.println("Failed to delete tables of the database ");
+                String eventMessage = "Failed to delete tables of the database " + realDatabase + " | " +
+                        "Time of Execution: " + instant + "ms";
+                EventLogger.eventLogData(eventMessage, instant);
+                throw new ExceptionHandler(eventMessage);
             }
         }
-        final boolean isInServerDatabaseDeleted = inServerDatabase.delete();
-        if (!isInServerDatabaseDeleted) {
-            System.out.println("Error: Database " + inServerDatabase + " deletion error!");
+        boolean isRealDatabaseDeleted = realDatabase.delete();
+        if (!isRealDatabaseDeleted) {
+            System.out.println("Database " + realDatabase + " deletion error!");
+            String eventMessage = "Database " + realDatabase + " deletion error!" + " | " +
+                    "Time of Execution: " + instant + "ms";
+            EventLogger.eventLogData(eventMessage, instant);
+            throw new ExceptionHandler(eventMessage);
         }
-        if (inServerDatabase.mkdir()) {
-            final File[] inMemoryDatabaseTables = inMemoryDatabase.listFiles();
-            if (inMemoryDatabaseTables == null) {
-                System.out.println("Error: Something went wrong. Transaction execution failed!");
+        if (realDatabase.mkdir()) {
+            File[] tempTables = tempDatabase.listFiles();
+            if (tempTables == null) {
+                System.out.println("Database is empty");
+                String eventMessage = "Temporary database " + tempDatabase + " is empty" + " | " +
+                        "Time of Execution: " + instant + "ms";
+                EventLogger.eventLogData(eventMessage, instant);
+                throw new ExceptionHandler(eventMessage);
             }
-            for (final File table : inMemoryDatabaseTables) {
-                final Path src = Paths.get(inMemoryDatabasePath + table.getName());
-                final Path dest = Paths.get(inServerDatabasePath + table.getName());
+            for (File table : tempTables) {
+                Path sourcePath = Paths.get(tempDatabasePath + "/" + table.getName());
+                Path destPath = Paths.get(realDatabasePath + "/" + table.getName());
                 try {
-                    Files.copy(src, dest);
-                } catch (final IOException e) {
-                    e.printStackTrace();
-                    System.out.println(e);
+                    Files.copy(sourcePath, destPath);
+                } catch (Exception e) {
+                    throw new ExceptionHandler(e.getMessage());
                 }
             }
-            for (final File table : inMemoryDatabaseTables) {
-                final boolean isTableDeleted = table.delete();
+//            TODO: REPLACE WITH DROP DATABASE
+            for (File table : tempTables) {
+                boolean isTableDeleted = table.delete();
                 if (!isTableDeleted) {
-                    System.out.println("Error: Failed to delete tables of the database " + inMemoryDatabase + " Please try again!");
+                    System.out.println("Failed to delete tables of the database " + tempDatabase + " Please try again!");
+                    String eventMessage = "Failed to delete tables of the database " + tempDatabase + " | " +
+                            "Time of Execution: " + instant + "ms";
+                    EventLogger.eventLogData(eventMessage, instant);
+                    throw new ExceptionHandler(eventMessage);
                 }
             }
-            final boolean isInMemoryDatabaseDeleted = inMemoryDatabase.delete();
-            if (!isInMemoryDatabaseDeleted) {
-                System.out.println("Error: Database " + inMemoryDatabase + " deletion error! ");
+            boolean isTempDatabaseDeleted = tempDatabase.delete();
+            if (!isTempDatabaseDeleted) {
+                System.out.println("Database " + tempDatabase + " deletion error! ");
+                String eventMessage = "Database " + tempDatabase + " deletion error!" + " | " +
+                        "Time of Execution: " + instant + "ms";
+                EventLogger.eventLogData(eventMessage, instant);
+                throw new ExceptionHandler(eventMessage);
             }
+            DatabaseService.CURRENT_DATABASE_PATH = realDatabasePath;
+            DatabaseService.isTransactionRunning = false;
             System.out.println("Transaction committed!");
-
+            String eventMessage = "Commit transaction on " + selectedDatabase + " | " +
+                    "Time of Execution: " + instant + "ms";
+            EventLogger.eventLogData(eventMessage, instant);
         } else {
-            System.out.println("Error: Something went wrong. Transaction execution failed!");
+            System.out.println("Failed to commit");
+            String eventMessage = "Commit Failed" + " | " +
+                    "Time of Execution: " + instant + "ms";
+            EventLogger.eventLogData(eventMessage, instant);
+            throw new ExceptionHandler(eventMessage);
         }
     }
 }

@@ -8,17 +8,20 @@ public class QueryLogger {
     private static final String LOGS_DIRECTORY = "logs/";
     private static final String EVENT_LOG_FILE_PATH = LOGS_DIRECTORY + "queryLog.txt";
 
+    static {
+        init();
+    }
+
     public QueryLogger() {
         init();
     }
 
-    private void init() {
+    private static void init() {
         File logsDir = new File(LOGS_DIRECTORY);
         if (!logsDir.exists()) {
-            logsDir.mkdirs();
+            logsDir.mkdir();
         }
     }
-
 
     /*
     String folder, String query_type, String database_name,

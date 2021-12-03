@@ -9,14 +9,18 @@ public class EventLogger {
     private static final String LOGS_DIRECTORY = "logs/";
     private static final String EVENT_LOG_FILE_PATH = LOGS_DIRECTORY + "eventLog.txt";
 
+    static {
+        init();
+    }
+
     public EventLogger() {
         init();
     }
 
-    private void init() {
+    private static void init() {
         File logsDir = new File(LOGS_DIRECTORY);
         if (!logsDir.exists()) {
-            logsDir.mkdirs();
+            logsDir.mkdir();
         }
     }
 
@@ -42,6 +46,7 @@ public class EventLogger {
             e.printStackTrace();
         }
     }
+
     public void log(String executionTime, Instant timestamp) {
         eventLogData(executionTime, timestamp);
     }

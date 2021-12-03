@@ -8,14 +8,18 @@ public class GeneralLogger {
     private static final String LOGS_DIRECTORY = "logs/";
     private static final String GENERAL_LOG_FILE_PATH = LOGS_DIRECTORY + "generalLog.txt";
 
+    static {
+        init();
+    }
+
     public GeneralLogger() {
         init();
     }
 
-    private void init() {
+    private static void init() {
         File logsDir = new File(LOGS_DIRECTORY);
         if (!logsDir.exists()) {
-            logsDir.mkdirs();
+            logsDir.mkdir();
         }
     }
 

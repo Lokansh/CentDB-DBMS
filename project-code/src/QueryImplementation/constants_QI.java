@@ -18,5 +18,6 @@ public class constants_QI {
     final String DROP_TB = "^drop table.*$";
     final String START_TRANSACTION = "\\s*start transaction\\s*;$";
     final String ROLLBACK_TRANSACTION = "\\s*rollback\\s*;$";
+    final String COMMIT_TRANSACTION = "\\s*commit\\s*;$";
 
 }

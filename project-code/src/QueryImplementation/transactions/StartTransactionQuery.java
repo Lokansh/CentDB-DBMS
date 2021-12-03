@@ -23,10 +23,10 @@ public class StartTransactionQuery {
         if (DatabaseService.CURRENT_DATABASE_PATH == null) {
             System.out.println("No database selected");
             String eventMessage = "No database selected" + " | " +
-                    "Time of Execution: " +  instant + "ms";
+                    "Time of Execution: " + instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
             throw new ExceptionHandler(eventMessage);
-           // return;
+            // return;
         }
         String selectedDatabase = new File(DatabaseService.CURRENT_DATABASE_PATH).getName();
         String realDatabasePath = DatabaseService.getRootDatabaseFolderPath() + selectedDatabase;
@@ -48,14 +48,14 @@ public class StartTransactionQuery {
             if (tables == null) {
                 System.out.println("Database is empty. Transaction can't start");
                 String eventMessage = "Database is empty. Transaction can't start" + " | " +
-                        "Time of Execution: " +  instant + "ms";
+                        "Time of Execution: " + instant + "ms";
                 EventLogger.eventLogData(eventMessage, instant);
                 throw new ExceptionHandler(eventMessage);
                 //return;
             }
 
             for (File table : tables) {
-                Path sourcePath = Paths.get(realDatabase + "/" + table.getName());
+                Path sourcePath = Paths.get(realDatabasePath + "/" + table.getName());
                 Path destPath = Paths.get(tempDatabasePath + "/" + table.getName());
                 try {
                     Files.copy(sourcePath, destPath);
@@ -69,12 +69,12 @@ public class StartTransactionQuery {
             DatabaseService.isTransactionRunning = true;
             System.out.println("Transaction active for database " + selectedDatabase);
             String eventMessage = "Transaction active for database " + selectedDatabase + " | " +
-                    "Time of Execution: " +  instant + "ms";
+                    "Time of Execution: " + instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
         } else {
             System.out.println("Could not start transaction. Please try again");
-            String eventMessage = "Could not start transaction. Please try again"+ " | " +
-                    "Time of Execution: " +  instant + "ms";
+            String eventMessage = "Could not start transaction. Please try again" + " | " +
+                    "Time of Execution: " + instant + "ms";
             EventLogger.eventLogData(eventMessage, instant);
             throw new ExceptionHandler(eventMessage);
         }
