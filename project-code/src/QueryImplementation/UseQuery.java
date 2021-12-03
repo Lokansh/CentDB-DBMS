@@ -16,7 +16,7 @@ public class UseQuery {
             String dbname = QueryOperations.removeSemiColon(subQuery);
             System.out.println("dbname->" + dbname);
             String directoryPath = dataStoragePath + dbname;
-            DatabaseService.CURRENT_DATABASE_PATH = DatabaseService.ROOT_DATABASE_FOLDER_PATH + dbname;
+            DatabaseService.CURRENT_DATABASE_PATH = DatabaseService.getRootDatabaseFolderPath() + dbname;
             System.out.println(directoryPath);
             File theDir = new File(directoryPath);
             if (theDir.exists()) {
