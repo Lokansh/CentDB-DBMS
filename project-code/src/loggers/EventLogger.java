@@ -3,6 +3,7 @@ package loggers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
 
 public class EventLogger {
     private static final String LOGS_DIRECTORY = "logs/";
@@ -26,7 +27,7 @@ public class EventLogger {
                            String constraint
 
      */
-    private void logData(String executionTime, String dbState) {
+    public static void eventLogData(String executionTime, Instant dbState) {
         File generalLog = new File(EVENT_LOG_FILE_PATH);
         boolean generalLogExists = generalLog.exists();
 
@@ -42,6 +43,6 @@ public class EventLogger {
         }
     }
     public void log(String executionTime, String dbState) {
-        logData(executionTime, dbState);
+        eventLogData(executionTime, dbState);
     }
 }

@@ -1,5 +1,7 @@
 package QueryImplementation.transactions;
 
+import QueryImplementation.ExceptionHandler;
+import loggers.EventLogger;
 import services.DatabaseService;
 import services.TableService;
 
@@ -7,18 +9,22 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class StartTransactionQuery {
 
-    public void startTransaction() {
+    public void startTransaction() throws ExceptionHandler {
+        Instant instant = Instant.now();
         if (DatabaseService.CURRENT_DATABASE_PATH == null) {
-            System.out.println("No database selected");
-            return;
+            String eventMessage = "No database selected" + " | " +
+                    "Execution Time: " +  instant + "ms";
+            EventLogger.eventLogData(eventMessage, instant);
+            throw new ExceptionHandler(eventMessage);
+           // return;
         }
-
         String selectedDatabase = new File(DatabaseService.CURRENT_DATABASE_PATH).getName();
         String realDatabasePath = DatabaseService.getRootDatabaseFolderPath() + selectedDatabase;
         String tempDatabasePath = DatabaseService.getTempDatabaseFolderPath() + selectedDatabase;
@@ -37,8 +43,11 @@ public class StartTransactionQuery {
             }
 
             if (tables == null) {
-                System.out.println("Database is empty. Transaction can't start.");
-                return;
+                String eventMessage = "Database is empty. Transaction can't start" + " | " +
+                        "Execution Time: " +  instant + "ms";
+                EventLogger.eventLogData(eventMessage, instant);
+                throw new ExceptionHandler(eventMessage);
+                //return;
             }
 
             for (File table : tables) {
@@ -55,8 +64,14 @@ public class StartTransactionQuery {
             DatabaseService.CURRENT_DATABASE_PATH = tempDatabasePath;
             DatabaseService.isTransactionRunning = true;
             System.out.println("Transaction active for database " + selectedDatabase);
+            String eventMessage = "Transaction active for database " + selectedDatabase + " | " +
+                    "Execution Time: " +  instant + "ms";
+            EventLogger.eventLogData(eventMessage, instant);
         } else {
-            System.out.println("Could not start transaction. Please try again");
+            String eventMessage = "Could not start transaction. Please try again"+ " | " +
+                    "Execution Time: " +  instant + "ms";
+            EventLogger.eventLogData(eventMessage, instant);
+            throw new ExceptionHandler(eventMessage);
         }
     }
 
