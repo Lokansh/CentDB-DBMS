@@ -8,5 +8,5 @@ public class constants_QI {
     final String EQUAL_OPR = "=";
     final String DOT_OPR = "\\.";
     final String COMMA_OPR = ",";
-
+    final String DEL_QUERY = "(?<=delete\\s).*";
 }
