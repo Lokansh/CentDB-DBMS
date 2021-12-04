@@ -46,7 +46,7 @@ public class Main {
         Matcher createTBmatcher = createTBPattern.matcher(userArgument);
         if (createTBmatcher.find()) {
             System.out.println(createTBmatcher.group(0).trim());
-            //obj.createSchema("create table table1 (id int(10),name varchar(25));",globalDBDirectoryPath);
+
             obj.createSchema(userArgument, globalDBDirectoryPath);
         }
 
@@ -90,6 +90,8 @@ public class Main {
         Matcher dropMatcher = dropPattern.matcher(userArgument);
         if (dropMatcher.find()) {
             System.out.println(dropMatcher.group(0).trim());
+            System.out.println("Inside main drop table");
+            obj.dropTableQuery(userArgument, globalDBDirectoryPath);
         }
     }
 }
