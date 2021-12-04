@@ -20,7 +20,7 @@ public class CommitTransactionQuery {
             System.out.println("No transaction running. Please start a transaction first");
             String eventMessage = "No transaction running" + " | " +
                     "Time of Execution: " + instant + "ms";
-            EventLogger.eventLogData(eventMessage, instant);
+            EventLogger.eventLogData(eventMessage);
             throw new ExceptionHandler(eventMessage);
         }
 
@@ -33,9 +33,9 @@ public class CommitTransactionQuery {
 
         if (!tempDatabaseExists) {
             System.out.println("Database " + tempDatabase + " does not exists!");
-            String eventMessage = "Temporary Database " + tempDatabase + " does not exists!" + " | " +
+            String eventMessage = "Temporary Database " + tempDatabase + " does not exists" + " | " +
                     "Time of Execution: " + instant + "ms";
-            EventLogger.eventLogData(eventMessage, instant);
+            EventLogger.eventLogData(eventMessage);
             throw new ExceptionHandler(eventMessage);
         }
 
@@ -43,18 +43,18 @@ public class CommitTransactionQuery {
         boolean realDatabaseExists = realDatabase.isDirectory();
         if (!realDatabaseExists) {
             System.out.println("Database does not exists");
-            String eventMessage = "Real Database " + realDatabase + " does not exists!" + " | " +
+            String eventMessage = "Real Database " + realDatabase + " does not exists" + " | " +
                     "Time of Execution: " + instant + "ms";
-            EventLogger.eventLogData(eventMessage, instant);
+            EventLogger.eventLogData(eventMessage);
             throw new ExceptionHandler(eventMessage);
         }
 
         File[] allTables = realDatabase.listFiles();
         if (allTables == null) {
             System.out.println("Database is empty!");
-            String eventMessage = "Database " + realDatabase + " is empty!" + " | " +
+            String eventMessage = "Database " + realDatabase + " is empty" + " | " +
                     "Time of Execution: " + instant + "ms";
-            EventLogger.eventLogData(eventMessage, instant);
+            EventLogger.eventLogData(eventMessage);
             throw new ExceptionHandler(eventMessage);
         }
         for (File table : allTables) {
@@ -63,16 +63,16 @@ public class CommitTransactionQuery {
                 System.out.println("Failed to delete tables of the database ");
                 String eventMessage = "Failed to delete tables of the database " + realDatabase + " | " +
                         "Time of Execution: " + instant + "ms";
-                EventLogger.eventLogData(eventMessage, instant);
+                EventLogger.eventLogData(eventMessage);
                 throw new ExceptionHandler(eventMessage);
             }
         }
         boolean isRealDatabaseDeleted = realDatabase.delete();
         if (!isRealDatabaseDeleted) {
             System.out.println("Database " + realDatabase + " deletion error!");
-            String eventMessage = "Database " + realDatabase + " deletion error!" + " | " +
+            String eventMessage = "Deletion error for" + realDatabase + " Database" + " | " +
                     "Time of Execution: " + instant + "ms";
-            EventLogger.eventLogData(eventMessage, instant);
+            EventLogger.eventLogData(eventMessage);
             throw new ExceptionHandler(eventMessage);
         }
         if (realDatabase.mkdir()) {
@@ -81,7 +81,7 @@ public class CommitTransactionQuery {
                 System.out.println("Database is empty");
                 String eventMessage = "Temporary database " + tempDatabase + " is empty" + " | " +
                         "Time of Execution: " + instant + "ms";
-                EventLogger.eventLogData(eventMessage, instant);
+                EventLogger.eventLogData(eventMessage);
                 throw new ExceptionHandler(eventMessage);
             }
             for (File table : tempTables) {
@@ -100,16 +100,16 @@ public class CommitTransactionQuery {
                     System.out.println("Failed to delete tables of the database " + tempDatabase + " Please try again!");
                     String eventMessage = "Failed to delete tables of the database " + tempDatabase + " | " +
                             "Time of Execution: " + instant + "ms";
-                    EventLogger.eventLogData(eventMessage, instant);
+                    EventLogger.eventLogData(eventMessage);
                     throw new ExceptionHandler(eventMessage);
                 }
             }
             boolean isTempDatabaseDeleted = tempDatabase.delete();
             if (!isTempDatabaseDeleted) {
                 System.out.println("Database " + tempDatabase + " deletion error! ");
-                String eventMessage = "Database " + tempDatabase + " deletion error!" + " | " +
+                String eventMessage = "Deletion error in " + tempDatabase + " Database" + " | " +
                         "Time of Execution: " + instant + "ms";
-                EventLogger.eventLogData(eventMessage, instant);
+                EventLogger.eventLogData(eventMessage);
                 throw new ExceptionHandler(eventMessage);
             }
             DatabaseService.CURRENT_DATABASE_PATH = realDatabasePath;
@@ -117,12 +117,12 @@ public class CommitTransactionQuery {
             System.out.println("Transaction committed!");
             String eventMessage = "Commit transaction on " + selectedDatabase + " | " +
                     "Time of Execution: " + instant + "ms";
-            EventLogger.eventLogData(eventMessage, instant);
+            EventLogger.eventLogData(eventMessage);
         } else {
             System.out.println("Failed to commit");
             String eventMessage = "Commit Failed" + " | " +
                     "Time of Execution: " + instant + "ms";
-            EventLogger.eventLogData(eventMessage, instant);
+            EventLogger.eventLogData(eventMessage);
             throw new ExceptionHandler(eventMessage);
         }
     }
