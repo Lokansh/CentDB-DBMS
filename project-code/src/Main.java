@@ -1,7 +1,4 @@
-import QueryImplementation.InsertQuery;
-import QueryImplementation.QueryOperations;
-import QueryImplementation.UpdateQuery;
-import QueryImplementation.UseQuery;
+import QueryImplementation.*;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -55,7 +52,6 @@ public class Main {
         Matcher insertMatcher = insertPattern.matcher(userArgument);
         if (insertMatcher.find()) {
             System.out.println(insertMatcher.group(0).trim());
-            //String userArgument2 = s.nextLine();
 
             InsertQuery insertQueryObj = new InsertQuery();
             insertQueryObj.insertQuery(userArgument,globalDBDirectoryPath);
@@ -83,6 +79,8 @@ public class Main {
         Matcher deleteMatcher = deletePattern.matcher(userArgument);
         if (deleteMatcher.find()) {
             System.out.println(deleteMatcher.group(0).trim());
+            DeleteQuery deleteObj = new DeleteQuery();
+            deleteObj.deleteQuery(userArgument, globalDBDirectoryPath);
         }
 
         // Pattern Matcher for DROP

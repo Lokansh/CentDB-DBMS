@@ -11,7 +11,15 @@ public class constants_QI {
     final String EQUAL_OPR = "=";
     final String DOT_OPR = "\\.";
     final String COMMA_OPR = ",";
+  final String DEL_QUERY = "(?<=delete\\s).*";
+final List<String> dataType= Arrays.asList("INT","VARCHAR","BOOLEAN","BIGINT");
+<<<<<<< .mine
     final List<String> dataType= Arrays.asList("INT","VARCHAR","BOOLEAN","BIGINT");
     //final String datatypes = [""],
 
+=======
+    final String DEL_QUERY = "(?<=delete\\s).*";
+
+
+>>>>>>> .theirs
 }
