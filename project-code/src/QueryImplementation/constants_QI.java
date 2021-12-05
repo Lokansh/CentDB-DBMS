@@ -19,5 +19,6 @@ public class constants_QI {
     final String START_TRANSACTION = "\\s*start transaction\\s*;$";
     final String ROLLBACK_TRANSACTION = "\\s*rollback\\s*;$";
     final String COMMIT_TRANSACTION = "\\s*commit\\s*;$";
-
+    public final String ANALYTICS_COUNT_QUERIES = "\\s*count\\s*queries\\s*([a-zA-Z0-9_]+)\\s*;";
+    public final String ANALYTICS_UPDATE_QUERIES = "\\s*count\\s*update\\s*([a-zA-Z0-9_]+)\\s*;";
 }

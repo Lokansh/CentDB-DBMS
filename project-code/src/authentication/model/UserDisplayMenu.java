@@ -3,6 +3,7 @@ package authentication.model;
 import QueryImplementation.QueryExecutor;
 import analytics.Analytics;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class UserDisplayMenu {
@@ -13,7 +14,7 @@ public class UserDisplayMenu {
         this.scanner = scanner;
     }
 
-    public void displayMainMenu() {
+    public void displayMainMenu() throws IOException {
 
         System.out.println("User Menu");
 
@@ -44,8 +45,8 @@ public class UserDisplayMenu {
                     // Import SQL Dump;
                     break;
                 case "5":
-                    new Analytics(scanner);
-                    return;
+                    new Analytics(scanner).performAnalytics();
+                    break;
                 case "6":
                     Session.getInstance().logout();
                     return;

@@ -6,6 +6,7 @@ import authentication.model.User;
 import authentication.utils.HashingService;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Scanner;
 
 public class UserLogin {
 
+    public static final String USER_PROFILE_FILE_PATH = "User_Profile.txt";
     private final Scanner scanner;
 
     public UserLogin(Scanner scanner) {
@@ -44,7 +46,14 @@ public class UserLogin {
         String hashedUsername = HashingService.hashText(username);
         String hashedPassword = HashingService.hashText(password);
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("User_Profile.txt"))) {
+        File userProfile = new File(USER_PROFILE_FILE_PATH);
+
+        if (!userProfile.exists()) {
+            System.out.println("User does not exists. Please register first.");
+            return;
+        }
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(USER_PROFILE_FILE_PATH))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] userDetails = line.split("\\|");

@@ -1,68 +1,132 @@
 package analytics;
 
+import QueryImplementation.constants_QI;
+import services.DatabaseService;
+
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Analytics {
-    File[] files;
-    File databaseFolder;
-    String logFileName;
-    String databaseName;
-    int countQueries = 0;
-    String line;
-    ArrayList<String> columns = new ArrayList<>();
-    ArrayList<String> data = new ArrayList<>();
-    String[] columnSplit = null;
-    int count = 0;
-    HashMap<String, Integer> countQueriesByTable = new HashMap<>();
-    String tableName;
-    String queryType;
-    String queryStatus;
+    private static final String LOGS_DIRECTORY = "logs/";
+    private static final String QUERY_LOG_FILE_PATH = LOGS_DIRECTORY + "queryLog.txt";
 
-    public void countQueries(String masterFolder, String username) throws IOException {
-        File dir = new File(masterFolder + "\\" + username);
-        files = dir.listFiles();
-        for (File file : files) {
-            if (file.isDirectory()) {
-                databaseFolder = file;
-                databaseName = file.toString().split("\\\\")[file.toString().split("\\\\").length - 1];
-                logFileName = databaseName + "_logs.txt";
-                BufferedReader br = new BufferedReader(new FileReader(databaseFolder + "\\" + logFileName));
-                StringTokenizer st1 = new StringTokenizer(br.readLine(), "\t");
-                while (st1.hasMoreTokens()) {
-                    columns.add(st1.nextToken());
-                    count++;
-                }
-
-                if (columns.size() > 0) {
-                    for (String column : columns) {
-                        columnSplit = column.split("\\|");
-                    }
-                    while ((line = br.readLine()) != null) {
-                        StringTokenizer st2 = new StringTokenizer(line, "\t");
-                        for (int i = 0; i < count; i++) {
-                            if (st2.hasMoreTokens()) {
-                                data.add(st2.nextToken());
-                            }
-                        }
-                    }
+    private final Scanner scanner;
 
 
-                }
-                countQueriesByTable.forEach((tableKey, queryCount) -> {
-                    System.out.println("Total " + queryCount + " Update operations are performed on " + tableKey);
-                });
-                br.close();
-            }
-            data.clear();
-            countQueriesByTable.clear();
-            countQueries = 0;
-            System.out.println("\n");
-        }
+
+    public Analytics(Scanner scanner) {
+        this.scanner = scanner;
     }
 
-    public static void main(String[] args) throws IOException {
-        Analytics analytics = new Analytics();
-        analytics.countQueries("centDb", "user1");
+    public void countQueries(String databaseName) {
+
+        HashMap<String, Integer> countQueriesByDatabase = new HashMap<>();
+
+        String realDatabasePath = DatabaseService.getRootDatabaseFolderPath() + databaseName;
+
+        File dir = new File(realDatabasePath);
+        if(!dir.isDirectory()){
+            System.out.println("Failure : Database does not exists");
+            return;
+        }
+
+        if(!logExists()){
+            System.out.println("Failure : No data exists");
+            return;
+        }
+
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(QUERY_LOG_FILE_PATH))) {
+            bufferedReader.readLine();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] tokens = line.split("\\|");
+                String user = tokens[1].trim();
+                String dbName = tokens[2].trim();
+                if (databaseName.equalsIgnoreCase(dbName)) {
+                    if (countQueriesByDatabase.containsKey(user)) {
+                        countQueriesByDatabase.put(user, countQueriesByDatabase.get(user) + 1);
+                    } else {
+                        countQueriesByDatabase.put(user, 1);
+                    }
+                }
+            }
+        } catch (IOException e) {
+           e.printStackTrace();
+        }
+        countQueriesByDatabase.forEach((user, queryCount) -> {
+                System.out.println("user " + user + " submitted " + queryCount + " queries on " + databaseName);
+            });
+
+    }
+
+
+
+    public void countSuccessUpdateQueries(String databaseName) {
+
+        HashMap<String, Integer> countQueriesByDatabase = new HashMap<>();
+
+        String realDatabasePath = DatabaseService.getRootDatabaseFolderPath() + databaseName;
+
+        File dir = new File(realDatabasePath);
+        if(!dir.isDirectory()){
+            System.out.println("Failure : Database does not exists");
+            return;
+        }
+
+        if(!logExists()){
+            System.out.println("Failure : No data exists");
+            return;
+        }
+
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(QUERY_LOG_FILE_PATH))) {
+            bufferedReader.readLine();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] tokens = line.split("\\|");
+                String user = tokens[1].trim();
+                String dbName = tokens[2].trim();
+                if (databaseName.equalsIgnoreCase(dbName)) {
+                    if (countQueriesByDatabase.containsKey(user)) {
+                        countQueriesByDatabase.put(user, countQueriesByDatabase.get(user) + 1);
+                    } else {
+                        countQueriesByDatabase.put(user, 1);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        countQueriesByDatabase.forEach((user, queryCount) -> {
+            System.out.println("user " + user + " submitted " + queryCount + " queries on " + databaseName);
+        });
+
+    }
+
+
+    private boolean logExists() {
+        File logsDir = new File(QUERY_LOG_FILE_PATH);
+           return logsDir.exists();
+    }
+
+
+    public void performAnalytics(){
+   // String userArgument = null;
+    System.out.println("Enter Query-------");
+    String userArgument = scanner.nextLine();
+    userArgument = userArgument.trim();
+    System.out.println("Input query is:" + userArgument);
+
+    constants_QI cons = new constants_QI();
+
+    // Pattern Matcher for CREATE DATABASE
+    Pattern createDBPattern = Pattern.compile(cons.ANALYTICS_COUNT_QUERIES, Pattern.CASE_INSENSITIVE);
+    Matcher createDBMatcher = createDBPattern.matcher(userArgument);
+    if (createDBMatcher.find()) {
+        String databaseName = (createDBMatcher.group(1).trim());
+        System.out.println(databaseName);
+        countQueries(databaseName);
+    }
     }
 }

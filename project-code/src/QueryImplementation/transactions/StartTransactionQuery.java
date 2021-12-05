@@ -47,7 +47,7 @@ public class StartTransactionQuery {
 
             if (tables == null) {
                 System.out.println("Database is empty. Transaction can't start");
-                                                            String eventMessage = realDatabase + " Database is empty" + " | " +
+                String eventMessage = realDatabase + " Database is empty" + " | " +
                         "Time of Execution: " + instant + "ms";
                 EventLogger.eventLogData(eventMessage);
                 throw new ExceptionHandler(eventMessage);
