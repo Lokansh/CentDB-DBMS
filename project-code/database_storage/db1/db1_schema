@@ -1,0 +1,15 @@
+[Students]
+sid int(10) NOT NULL,
+sname varchar(50),
+PRIMARY KEY (`sid`);
+
+[courses]
+id int(10) NOT NULL AUTO INCREMENT,
+cid varchar(10) NOT NULL,
+cname varchar(50),
+sid int(10),
+PRIMARY KEY (`id`)
+FOREIGN KEY (`sid`);
+
+//insert into courses values (null,'c1','sdc',2);
+//insert into courses (cid,cname,sid) values ('c1','sdc',2);
