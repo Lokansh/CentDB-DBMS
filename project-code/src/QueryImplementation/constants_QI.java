@@ -1,5 +1,8 @@
 package QueryImplementation;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class constants_QI {
     final String a="abc";
     final String UPD_QUERY_DBTB_NAME = "(?<=update)(.*)(?=set)";
@@ -17,5 +20,7 @@ public class constants_QI {
     final String DELETE_ROW = "^delete.*$";
     final String DROP_TB = "^drop table.*$";
     final String EXTRACT_DB_FROM_GLOBALPATH = "(?<=/)(.*)";
+    final String DEL_QUERY = "(?<=delete\\s).*";
+    final List<String> dataType= Arrays.asList("INT","VARCHAR","BOOLEAN","BIGINT");
 
 }
