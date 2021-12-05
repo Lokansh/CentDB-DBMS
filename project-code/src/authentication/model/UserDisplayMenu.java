@@ -1,6 +1,7 @@
 package authentication.model;
 
 import QueryImplementation.QueryExecutor;
+import analytics.Analytics;
 
 import java.util.Scanner;
 
@@ -21,7 +22,8 @@ public class UserDisplayMenu {
             System.out.println("2. Generate ERD.");
             System.out.println("3. Generate Data Dictionary.");
             System.out.println("4. Export SQL Dump.");
-            System.out.println("5. Logout.");
+            System.out.println("5. Analytics");
+            System.out.println("6. Logout.");
 
             System.out.println("Choose an option:");
             String input = scanner.nextLine();
@@ -42,6 +44,9 @@ public class UserDisplayMenu {
                     // Import SQL Dump;
                     break;
                 case "5":
+                    new Analytics(scanner);
+                    return;
+                case "6":
                     Session.getInstance().logout();
                     return;
                 default:

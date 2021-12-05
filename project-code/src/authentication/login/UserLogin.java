@@ -49,6 +49,7 @@ public class UserLogin {
             while ((line = bufferedReader.readLine()) != null) {
                 String[] userDetails = line.split("\\|");
 
+                String name = userDetails[0];
                 String uname = userDetails[1];
                 String pword = userDetails[2];
 
@@ -71,7 +72,7 @@ public class UserLogin {
                         securityAnswers.add(userDetails[3 + i]);
                     }
 
-                    User user = new User(hashedUsername, hashedPassword, securityAnswers);
+                    User user = new User(name, hashedUsername, hashedPassword, securityAnswers);
                     Session.getInstance().setUser(user);
                     System.out.println("Login successful");
                     return;
