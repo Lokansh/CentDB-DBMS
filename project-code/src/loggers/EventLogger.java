@@ -3,7 +3,6 @@ package loggers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.Instant;
 
 public class EventLogger {
     private static final String LOGS_DIRECTORY = "logs/";
@@ -24,13 +23,6 @@ public class EventLogger {
         }
     }
 
-
-    /*
-    String query_type, String database_name,
-                           String table_name, String column_affected, String row_affected,
-                           String constraint
-
-     */
     public static void eventLogData(String executionTime) {
         File generalLog = new File(EVENT_LOG_FILE_PATH);
         boolean generalLogExists = generalLog.exists();
@@ -47,7 +39,4 @@ public class EventLogger {
         }
     }
 
-    public void log(String executionTime, Instant timestamp) {
-        eventLogData(executionTime);
-    }
 }

@@ -12,10 +12,6 @@ public class GeneralLogger {
         init();
     }
 
-    public GeneralLogger() {
-        init();
-    }
-
     private static void init() {
         File logsDir = new File(LOGS_DIRECTORY);
         if (!logsDir.exists()) {
@@ -23,7 +19,7 @@ public class GeneralLogger {
         }
     }
 
-    private void logData(String executionTime, String dbState) {
+    public static void logGeneralData(String executionTime, String dbState) {
         File generalLog = new File(GENERAL_LOG_FILE_PATH);
         boolean generalLogExists = generalLog.exists();
 
@@ -38,9 +34,4 @@ public class GeneralLogger {
             e.printStackTrace();
         }
     }
-
-    public void log(String executionTime, String dbState) {
-        logData(executionTime, dbState);
-    }
 }
-// DB state is the number of tables and records in the database at any instant

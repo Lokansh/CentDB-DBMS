@@ -3,16 +3,13 @@ package loggers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
 
 public class QueryLogger {
     private static final String LOGS_DIRECTORY = "logs/";
     private static final String EVENT_LOG_FILE_PATH = LOGS_DIRECTORY + "queryLog.txt";
 
     static {
-        init();
-    }
-
-    public QueryLogger() {
         init();
     }
 
@@ -23,29 +20,19 @@ public class QueryLogger {
         }
     }
 
-    /*
-    String folder, String query_type, String database_name,
-                               String table_name, String column_affected, String row_affected,
-                               String constraint
+    public static void logQueryData(String queryType, String user, String database, String table, String query, Instant timestamp) {
+        File queryLogFile = new File(EVENT_LOG_FILE_PATH);
+        boolean queryLogExists = queryLogFile.exists();
 
-     */
-    private void logData(String executionTime, String dbState) {
-        File generalLog = new File(EVENT_LOG_FILE_PATH);
-        boolean generalLogExists = generalLog.exists();
+        try (FileWriter writer = new FileWriter(queryLogFile, true)) {
 
-        try (FileWriter writer = new FileWriter(generalLog, true)) {
-
-            if (!generalLogExists) {
-                writer.append("DB State | Execution Time\n");
+            if (!queryLogExists) {
+                writer.append("Query Type | User | Database | Table | Query | Timestamp\n");
             }
-            String queryLog = executionTime + " | " + dbState;
+            String queryLog = queryType + " | " + user + " | " + database + " | " + table + " | " + query + " | " + timestamp;
             writer.append(queryLog).append("\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void log(String executionTime, String dbState) {
-        logData(executionTime, dbState);
     }
 }

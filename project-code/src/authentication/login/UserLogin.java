@@ -47,12 +47,12 @@ public class UserLogin {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("User_Profile.txt"))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                String[] userDetails = line.split(" ");
+                String[] userDetails = line.split("\\|");
 
-                String uname = userDetails[0];
-                String pword = userDetails[1];
+                String uname = userDetails[1];
+                String pword = userDetails[2];
 
-                String sans = userDetails[2 + questionIndex];
+                String sans = userDetails[3 + questionIndex];
 
                 if (hashedUsername.equals(uname)) {
 
@@ -68,7 +68,7 @@ public class UserLogin {
 
                     List<String> securityAnswers = new ArrayList<>();
                     for (int i = 0; i < SecurityQuestion.getInstance().getSecurityQuestion().size(); i++) {
-                        securityAnswers.add(userDetails[2 + i]);
+                        securityAnswers.add(userDetails[3 + i]);
                     }
 
                     User user = new User(hashedUsername, hashedPassword, securityAnswers);

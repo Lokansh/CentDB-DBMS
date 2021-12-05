@@ -18,10 +18,12 @@ public class UserRegistration {
         this.scanner = scanner;
     }
 
-    private void registerUser(String username, String password, List<String> securityAnswers) {
+    private void registerUser(String name, String username, String password, List<String> securityAnswers) {
 
         String hashedUsername = HashingService.hashText(username);
         String hashedPassword = HashingService.hashText(password);
+
+        String delimiter = "|";
 
         if (checkUserExists(hashedUsername)) {
             System.out.println("Username taken");
@@ -31,16 +33,19 @@ public class UserRegistration {
         try (FileWriter fileWriter = new FileWriter("User_Profile.txt", true)) {
             StringBuilder builder = new StringBuilder();
 
+            builder.append(name)
+                    .append(delimiter);
+
             builder.append(hashedUsername)
-                    .append(" ")
+                    .append(delimiter)
                     .append(hashedPassword)
-                    .append(" ");
+                    .append(delimiter);
 
             for (String answer : securityAnswers) {
                 builder.append(answer)
-                        .append(" ");
+                        .append(delimiter);
             }
-
+            builder.setLength(builder.length() - 1);
             fileWriter.append(builder.toString());
             fileWriter.append(System.lineSeparator());
             System.out.println("User registered successfully");
@@ -59,8 +64,8 @@ public class UserRegistration {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userProfile))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                String[] userDetails = line.split(" ");
-                String uname = userDetails[0];
+                String[] userDetails = line.split("\\|");
+                String uname = userDetails[1];
 
                 if (username.equals(uname)) {
                     return true;
@@ -73,6 +78,9 @@ public class UserRegistration {
     }
 
     public void register() {
+
+        System.out.println("Enter your name");
+        String name = scanner.nextLine();
 
         System.out.println("Enter username");
         String username = scanner.nextLine();
@@ -90,6 +98,6 @@ public class UserRegistration {
             System.out.println(entryAnswer.getValue());
             securityAnswers.add(scanner.nextLine());
         }
-        registerUser(username, password, securityAnswers);
+        registerUser(name, username, password, securityAnswers);
     }
 }
