@@ -1,7 +1,5 @@
 package QueryImplementation;
 
-import services.DatabaseService;
-
 import javax.imageio.IIOException;
 
 import java.io.*;
@@ -9,6 +7,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.io.IOException;
 import java.util.regex.Pattern;
+
+import static QueryImplementation.CreateTableQuery.createTable;
+import static QueryImplementation.DropTableQuery.dropTable;
 
 public class QueryOperations {
     private String dataStoragePath = "database_storage/";
@@ -36,9 +37,15 @@ public class QueryOperations {
             return false;
         }
     }
-    public boolean createSchema(String query, String path) throws IOException {
+    public boolean createSchema(String query, String path)  {
         if(query.contains("create table")){
-            SchemaCreation.schemaCreation(query,path);
+            createTable(query,path);
+        }
+        return true;
+    }
+    public boolean dropTableQuery(String query, String path)  {
+        if(query.contains("drop table")){
+            dropTable(query,path);
         }
         return true;
     }
@@ -216,5 +223,4 @@ public class QueryOperations {
         } catch (IOException e) {System.out.println(Arrays.toString(e.getStackTrace()));}
         return null;
     }
-
 }

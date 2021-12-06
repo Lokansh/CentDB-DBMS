@@ -1,9 +1,5 @@
 package QueryImplementation;
 
-import QueryImplementation.transactions.CommitTransactionQuery;
-import QueryImplementation.transactions.RollbackQuery;
-import QueryImplementation.transactions.StartTransactionQuery;
-
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +14,7 @@ public class QueryExecutor {
         this.scanner = scanner;
     }
 
-    public void queryExecute() {
+    public void queryExecute(){
         try {
             // accept user input
             String userArgument = null;
@@ -62,10 +58,9 @@ public class QueryExecutor {
             Matcher insertMatcher = insertPattern.matcher(userArgument);
             if (insertMatcher.find()) {
                 System.out.println(insertMatcher.group(0).trim());
-                String userArgument2 = scanner.nextLine();
-
+                
                 InsertQuery insertQueryObj = new InsertQuery();
-                insertQueryObj.insertQuery(userArgument2, globalDBDirectoryPath);
+                insertQueryObj.insertQuery(userArgument, globalDBDirectoryPath);
             }
 
             // Pattern Matcher for SELECT
@@ -98,29 +93,6 @@ public class QueryExecutor {
             if (dropMatcher.find()) {
                 System.out.println(dropMatcher.group(0).trim());
             }
-
-            Pattern startTransactionPattern = Pattern.compile(cons.START_TRANSACTION, Pattern.CASE_INSENSITIVE);
-            Matcher startTransactionMatcher = startTransactionPattern.matcher(userArgument);
-            if (startTransactionMatcher.find()) {
-                StartTransactionQuery startTransactionQuery = new StartTransactionQuery();
-                startTransactionQuery.startTransaction();
-            }
-
-            Pattern rollbackTransactionPattern = Pattern.compile(cons.ROLLBACK_TRANSACTION, Pattern.CASE_INSENSITIVE);
-            Matcher rollbackTransactionMatcher = rollbackTransactionPattern.matcher(userArgument);
-            if (rollbackTransactionMatcher.find()) {
-                RollbackQuery rollbackQuery = new RollbackQuery();
-                rollbackQuery.rollbackTransaction();
-            }
-
-            Pattern commitTransactionPattern = Pattern.compile(cons.COMMIT_TRANSACTION, Pattern.CASE_INSENSITIVE);
-            Matcher commitTransactionMatcher = commitTransactionPattern.matcher(userArgument);
-            if (commitTransactionMatcher.find()) {
-                CommitTransactionQuery commitTransactionQuery = new CommitTransactionQuery();
-                commitTransactionQuery.commitTransaction();
-            }
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
+        } catch (Exception e) {e.getStackTrace();}
     }
 }
