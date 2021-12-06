@@ -2,8 +2,11 @@ package authentication.registration;
 
 import authentication.SecurityQuestion;
 import authentication.utils.HashingService;
+import exceptions.ExceptionHandler;
+import loggers.GeneralLogger;
 
 import java.io.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,12 +16,13 @@ public class UserRegistration {
 
     private final static String USER_PROFILE_FILE_PATH = "User_Profile.txt";
     private final Scanner scanner;
+    public Instant instant = Instant.now();
 
     public UserRegistration(Scanner scanner) {
         this.scanner = scanner;
     }
 
-    private void registerUser(String name, String username, String password, List<String> securityAnswers) {
+    private void registerUser(String name, String username, String password, List<String> securityAnswers) throws ExceptionHandler {
 
         String hashedUsername = HashingService.hashText(username);
         String hashedPassword = HashingService.hashText(password);
@@ -27,7 +31,11 @@ public class UserRegistration {
 
         if (checkUserExists(hashedUsername)) {
             System.out.println("Username taken");
-            return;
+            String logMessage = "Username taken " + " | " +
+                    "Time of Execution: " + instant + "ms";
+            GeneralLogger.logGeneralData(username,logMessage);
+            throw new ExceptionHandler(logMessage);
+           // return;
         }
 
         try (FileWriter fileWriter = new FileWriter("User_Profile.txt", true)) {
@@ -49,6 +57,9 @@ public class UserRegistration {
             fileWriter.append(builder.toString());
             fileWriter.append(System.lineSeparator());
             System.out.println("User registered successfully");
+            String logMessage = "User registered successfully " + " | " +
+                    "Time of Execution: " + instant + "ms";
+            GeneralLogger.logGeneralData(username,logMessage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,7 +88,7 @@ public class UserRegistration {
         return false;
     }
 
-    public void register() {
+    public void register() throws ExceptionHandler {
 
         System.out.println("Enter your name");
         String name = scanner.nextLine();

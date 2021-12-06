@@ -19,16 +19,16 @@ public class GeneralLogger {
         }
     }
 
-    public static void logGeneralData(String executionTime, String dbState) {
+    public static void logGeneralData(String username, String logMessage) {
         File generalLog = new File(GENERAL_LOG_FILE_PATH);
         boolean generalLogExists = generalLog.exists();
 
         try (FileWriter writer = new FileWriter(generalLog, true)) {
 
             if (!generalLogExists) {
-                writer.append("DB State | Execution Time\n");
+                writer.append("Username " + " | " + " Log message" + "\n");
             }
-            String queryLog = executionTime + " | " + dbState;
+            String queryLog = username + " | " + logMessage;
             writer.append(queryLog).append("\n");
         } catch (IOException e) {
             e.printStackTrace();

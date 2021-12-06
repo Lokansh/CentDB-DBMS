@@ -1,0 +1,3 @@
+Username  |  Log message
+shel | User registered successfully  | Time of Execution: 2021-12-06T20:17:52.327225500Zms
+shelja | Login successful | Time of Execution: 2021-12-06T20:18:07.935412Zms

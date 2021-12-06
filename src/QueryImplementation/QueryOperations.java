@@ -1,8 +1,13 @@
 package QueryImplementation;
 
+import authentication.model.Session;
+import exceptions.ExceptionHandler;
+import loggers.QueryLogger;
+
 import javax.imageio.IIOException;
 
 import java.io.*;
+import java.time.Instant;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.io.IOException;
@@ -13,7 +18,8 @@ import static QueryImplementation.DropTableQuery.dropTable;
 
 public class QueryOperations {
     private String dataStoragePath = "database_storage/";
-    public Boolean createDatabase(String query){
+    public Instant instant = Instant.now();
+    public Boolean createDatabase(String query) throws ExceptionHandler {
         Pattern ptr = Pattern.compile("/^create database$/");
         //Matcher m;
         if (query.contains("create database")){
@@ -26,24 +32,38 @@ public class QueryOperations {
             if (!theDir.exists()){
                 theDir.mkdirs();
                 System.out.println("New database folder created: "+dbname);
+                String logMessage = "New database folder created  " + " | " +
+                        "Time of Execution: " + instant + "ms";
+                QueryLogger.logQueryData("Query Operation  " , Session.getInstance().getUser().getName() ,
+                        dbname,null,query ,"Success " , instant);
                 return true;
             }
             else {
                 System.out.println("Database already present: "+dbname);
-                return false;
+                String logMessage = "New database folder created  " + " | " +
+                        "Time of Execution: " + instant + "ms";
+                QueryLogger.logQueryData("Query Operation  " , Session.getInstance().getUser().getName() ,
+                        dbname,null,query ,"Failure " , instant);
+                throw new ExceptionHandler(logMessage);
+                //return false;
             }
         } else {
             System.out.println("Invalid Query Received");
-            return false;
+            String logMessage = "Invalid Query Received  " + " | " +
+                    "Time of Execution: " + instant + "ms";
+            QueryLogger.logQueryData("Query Operation  " , Session.getInstance().getUser().getName() ,
+                    null,null,query ,"Failure " , instant);
+            throw new ExceptionHandler(logMessage);
+            //return false;
         }
     }
-    public boolean createSchema(String query, String path)  {
+    public boolean createSchema(String query, String path) throws ExceptionHandler {
         if(query.contains("create table")){
             createTable(query,path);
         }
         return true;
     }
-    public boolean dropTableQuery(String query, String path)  {
+    public boolean dropTableQuery(String query, String path) throws ExceptionHandler {
         if(query.contains("drop table")){
             dropTable(query,path);
         }

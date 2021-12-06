@@ -2,6 +2,7 @@ import authentication.login.UserLogin;
 import authentication.model.Session;
 import authentication.model.UserDisplayMenu;
 import authentication.registration.UserRegistration;
+import exceptions.ExceptionHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ExceptionHandler {
         Scanner scanner = new Scanner(System.in);
         Session userSession = Session.getInstance();
         File file = new File("database_storage");

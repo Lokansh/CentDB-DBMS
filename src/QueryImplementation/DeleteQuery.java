@@ -1,6 +1,12 @@
 package QueryImplementation;
 
+import authentication.model.Session;
+import exceptions.ExceptionHandler;
+import loggers.GeneralLogger;
+import loggers.QueryLogger;
+
 import java.io.*;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -8,8 +14,9 @@ import java.util.regex.Pattern;
 
 public class DeleteQuery {
     final String dataStoragePath = "database_storage/";
+    public static Instant instant = Instant.now();
 
-    public Boolean deleteQuery(String query, String directoryPath) throws IOException {
+    public Boolean deleteQuery(String query, String directoryPath) throws IOException, ExceptionHandler {
         constants_QI constant = new constants_QI();
         String database = "";
         String onlyTableName = "";
@@ -69,9 +76,19 @@ public class DeleteQuery {
                 File newfile = new File(tempFilePath);
                 newfile.renameTo(filePath);
                 System.out.println("Delete successful");
+                String logMessage = "Delete successful  " + " | " +
+                        "Time of Execution: " + instant + "ms";
+                QueryLogger.logQueryData("Delete  " , Session.getInstance().getUser().getName() ,
+                        database,tableName,query ,"Success " , instant);
             }
             else{
                 System.out.println("Table file does not exist.");
+
+                String logMessage = "While deleting table file does not exist  " + " | " +
+                        "Time of Execution: " + instant + "ms";
+                QueryLogger.logQueryData("Delete  " , Session.getInstance().getUser().getName() ,
+                        database,tableName,query ,"Failure " , instant);
+                throw new ExceptionHandler(logMessage);
             }
         }
 

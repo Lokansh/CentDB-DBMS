@@ -4,11 +4,14 @@ import authentication.SecurityQuestion;
 import authentication.model.Session;
 import authentication.model.User;
 import authentication.utils.HashingService;
+import exceptions.ExceptionHandler;
+import loggers.GeneralLogger;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -17,12 +20,13 @@ public class UserLogin {
 
     public static final String USER_PROFILE_FILE_PATH = "User_Profile.txt";
     private final Scanner scanner;
+    public Instant instant = Instant.now();
 
     public UserLogin(Scanner scanner) {
         this.scanner = scanner;
     }
 
-    public void login() {
+    public void login() throws ExceptionHandler {
 
         System.out.println("Enter username");
         String username = scanner.nextLine();
@@ -42,7 +46,7 @@ public class UserLogin {
         login(username, password, questionIndex, securityAnswer);
     }
 
-    private void login(String username, String password, int questionIndex, String securityAnswer) {
+    private void login(String username, String password, int questionIndex, String securityAnswer) throws ExceptionHandler {
         String hashedUsername = HashingService.hashText(username);
         String hashedPassword = HashingService.hashText(password);
 
@@ -50,7 +54,11 @@ public class UserLogin {
 
         if (!userProfile.exists()) {
             System.out.println("User does not exists. Please register first.");
-            return;
+            String logMessage = "User does not exists. Please register first." + " | " +
+                    "Time of Execution: " + instant + "ms";
+            GeneralLogger.logGeneralData(username,logMessage);
+            throw new ExceptionHandler(logMessage);
+            //return;
         }
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(USER_PROFILE_FILE_PATH))) {
@@ -68,12 +76,20 @@ public class UserLogin {
 
                     if (!hashedPassword.equals(pword)) {
                         System.out.println("Invalid credentials");
-                        return;
+                        String logMessage = "Invalid credentials" + " | " +
+                                "Time of Execution: " + instant + "ms";
+                        GeneralLogger.logGeneralData(name,logMessage);
+                        throw new ExceptionHandler(logMessage);
+                        //return;
                     }
 
                     if (!securityAnswer.equals(sans)) {
                         System.out.println("Invalid credentials");
-                        return;
+                        String logMessage = "Invalid credentials" + " | " +
+                                "Time of Execution: " + instant + "ms";
+                        GeneralLogger.logGeneralData(name,logMessage);
+                        throw new ExceptionHandler(logMessage);
+                        //return;
                     }
 
                     List<String> securityAnswers = new ArrayList<>();
@@ -84,6 +100,9 @@ public class UserLogin {
                     User user = new User(name, hashedUsername, hashedPassword, securityAnswers);
                     Session.getInstance().setUser(user);
                     System.out.println("Login successful");
+                    String logMessage = "Login successful" + " | " +
+                            "Time of Execution: " + instant + "ms";
+                    GeneralLogger.logGeneralData(name, logMessage);
                     return;
                 }
 

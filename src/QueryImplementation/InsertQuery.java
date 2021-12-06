@@ -1,18 +1,25 @@
 package QueryImplementation;
 
+import authentication.model.Session;
+import exceptions.ExceptionHandler;
+import loggers.GeneralLogger;
+import loggers.QueryLogger;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
 public class InsertQuery {
     private String dataStoragePath = "database_storage/";
+    public static Instant instant = Instant.now();
 
     //insert query
     //insert into table values ()
-    public Boolean insertQuery(String query, String directoryPath) throws IOException {
+    public Boolean insertQuery(String query, String directoryPath) throws IOException, ExceptionHandler {
         String database = "";
         String onlyTableName = "";
         String tableName = "";
@@ -48,10 +55,19 @@ public class InsertQuery {
                 System.out.println("Table does not exist so table file created -->" + fileCreatedSuccess);
             }
             System.out.println("File created or file exists operation complete");
+            String logMessage = "File created or file exists operation complete  " + " | " +
+                    "Time of Execution: " + instant + "ms";
+            QueryLogger.logQueryData("Insert  " , Session.getInstance().getUser().getName() ,
+                    database,tableName,query ,"Success " , instant);
         }
         else if(directoryPath.isEmpty()){
             System.out.println("Database not selected, please select database before inserting any values");
-            return false;
+            String logMessage = "Database was not selected while inserting  " + " | " +
+                    "Time of Execution: " + instant + "ms";
+            QueryLogger.logQueryData("Insert  " , Session.getInstance().getUser().getName() ,
+                    database,tableName,query ,"Failure " , instant);
+            throw new ExceptionHandler(logMessage);
+            //return false;
         }
 
         String tempString2 = QueryOperations.removeSemiColon(query.substring(query.indexOf("(") + 1).trim());

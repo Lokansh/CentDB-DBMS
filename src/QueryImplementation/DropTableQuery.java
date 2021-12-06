@@ -1,13 +1,19 @@
 package QueryImplementation;
 
+import exceptions.ExceptionHandler;
+import loggers.GeneralLogger;
+
 import java.io.File;
+import java.time.Instant;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DropTableQuery {
     static final String dataStoragePath = "database_storage/";
-    public static void dropTable(String query, String globalPath) {
+
+    public static Instant instant = Instant.now();
+    public static void dropTable(String query, String globalPath) throws ExceptionHandler {
         final String dataStoragePath = "database_storage/";
         String table = null;
         String dbName = null;
@@ -19,7 +25,11 @@ public class DropTableQuery {
             table = result.group(1);
             System.out.println(table);
         } else {
-            System.out.println("please enter valid query");
+            System.out.println("Please enter a valid query");
+            String logMessage = "Please enter a valid query to drop the table" + " | " +
+                    "Time of Execution: " + instant + "ms";
+            GeneralLogger.logGeneralData(query,logMessage);
+            throw new ExceptionHandler(logMessage);
         }
         if (table.contains(".")) {
             dbName = table.split("\\.")[0];
@@ -32,9 +42,16 @@ public class DropTableQuery {
             File f = new File(tablePath);           //file to be delete
             if (f.delete())                      //returns Boolean value
             {
-                System.out.println(f.getName() + " deleted");   //getting and printing the file name
+                System.out.println(f.getName() + " Drop Successful");   //getting and printing the file name
+                String logMessage = "Drop Successful" + " | " +
+                        "Time of Execution: " + instant + "ms";
+                GeneralLogger.logGeneralData(query,logMessage);
             } else {
-                System.out.println("failed");
+                System.out.println("Drop Failed");
+                String logMessage = "Drop Failed" + " | " +
+                        "Time of Execution: " + instant + "ms";
+                GeneralLogger.logGeneralData(query,logMessage);
+                throw new ExceptionHandler(logMessage);
             }
         } catch (Exception e) {
             e.printStackTrace();
