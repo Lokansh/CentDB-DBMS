@@ -3,6 +3,7 @@ import authentication.model.Session;
 import authentication.model.UserDisplayMenu;
 import authentication.registration.UserRegistration;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -12,6 +13,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         Session userSession = Session.getInstance();
+        File file = new File("database_storage");
+        if(!file.exists()) {
+            file.mkdir();
+        }
 
         while (true) {
             System.out.println("1. User Registration");
