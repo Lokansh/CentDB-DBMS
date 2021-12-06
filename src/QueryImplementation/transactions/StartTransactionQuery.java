@@ -35,8 +35,7 @@ public class StartTransactionQuery {
 
         File tempDatabase = new File(tempDatabasePath);
 
-//        TODO: REPLACE WITH DELETE DATABASE;
-        deleteDatabase_REMOVEME(tempDatabase);
+        deleteDatabase(tempDatabase);
 
         if (tempDatabase.mkdirs()) {
             File realDatabase = new File(realDatabasePath);
@@ -81,7 +80,7 @@ public class StartTransactionQuery {
         }
     }
 
-    private static void deleteDatabase_REMOVEME(File database) {
+    private static void deleteDatabase(File database) {
         if (database.isDirectory()) {
             File[] files = database.listFiles();
             if (files != null) {

@@ -93,7 +93,7 @@ public class CommitTransactionQuery {
                     throw new ExceptionHandler(e.getMessage());
                 }
             }
-//            TODO: REPLACE WITH DROP DATABASE
+
             for (File table : tempTables) {
                 boolean isTableDeleted = table.delete();
                 if (!isTableDeleted) {
