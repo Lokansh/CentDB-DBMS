@@ -1,0 +1,7 @@
+DB State | Execution Time
+Transaction active for database db1 | Time of Execution: 2021-12-06T03:49:37.769710800Zms
+Transaction active for database db1 | Time of Execution: 2021-12-06T03:57:59.352807Zms
+Transaction active for database db2l | Time of Execution: 2021-12-06T04:06:22.145858300Zms
+Transaction rollback is successful | Time of Execution: 2021-12-06T04:07:13.463308900Zms
+Transaction active for database db1 | Time of Execution: 2021-12-06T04:07:43.165022600Zms
+Commit transaction on db1 | Time of Execution: 2021-12-06T04:09:13.736182900Zms

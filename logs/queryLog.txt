@@ -1,0 +1,4 @@
+Query Type | User | Database | Table | Query | Status | Timestamp
+Update | chand | db1 | students | update students set id=1 where id=4; | Success | 2021-12-06T04:15:42.756311100Z
+Update | chand | db1 | me | update me set id=1 where id=5; | Failure | 2021-12-06T04:25:03.490896900Z
+Update | chand | db1 | me | update me set id=3 where id=5; | Failure | 2021-12-06T04:26:14.134399500Z
