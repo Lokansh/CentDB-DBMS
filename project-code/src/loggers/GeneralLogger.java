@@ -8,18 +8,18 @@ public class GeneralLogger {
     private static final String LOGS_DIRECTORY = "logs/";
     private static final String GENERAL_LOG_FILE_PATH = LOGS_DIRECTORY + "generalLog.txt";
 
-    static {
+    public GeneralLogger() {
         init();
     }
 
-    private static void init() {
+    private void init() {
         File logsDir = new File(LOGS_DIRECTORY);
         if (!logsDir.exists()) {
-            logsDir.mkdir();
+            logsDir.mkdirs();
         }
     }
 
-    public static void logGeneralData(String executionTime, String dbState) {
+    private void logData(String executionTime, String dbState) {
         File generalLog = new File(GENERAL_LOG_FILE_PATH);
         boolean generalLogExists = generalLog.exists();
 
@@ -34,4 +34,9 @@ public class GeneralLogger {
             e.printStackTrace();
         }
     }
+
+    public void log(String executionTime, String dbState) {
+        logData(executionTime, dbState);
+    }
 }
+// DB state is the number of tables and records in the database at any instant
