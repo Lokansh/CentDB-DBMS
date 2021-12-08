@@ -167,14 +167,15 @@ public class InsertQuery {
             if(primaryKeyColumnFromSchema != null) {
                 primaryKeyValue = columnValueMap.get(primaryKeyColumnFromSchema);
             }
+            if(primaryKeyValue==null && primaryKeyColumnFromSchema != null){
+                System.out.println("Please provide value for Primary Key Attribute in query");
+                return false;
+            }
         } catch (ExceptionHandler exceptionHandler) {
             exceptionHandler.printStackTrace();
         }
         //System.out.println("primaryKeyValue--" + primaryKeyValue);
-        if(primaryKeyValue==null){
-            System.out.println("Please provide value for Primary Key Attribute in query");
-            return false;
-        }
+
 
         Boolean primaryKeyCheckBol = false;
         QueryOperations selectObj = new QueryOperations();
