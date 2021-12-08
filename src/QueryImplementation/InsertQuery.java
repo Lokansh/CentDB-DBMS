@@ -84,7 +84,7 @@ public class InsertQuery {
             //System.out.println("tablePath->" + tablePath);
             Boolean fileExist = filePath.isFile();
             if(!fileExist){
-                System.out.println("Table does not exist");
+                System.out.println("Please select database before inserting.");
                 return false;
             }
         }
