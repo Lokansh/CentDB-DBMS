@@ -47,7 +47,7 @@ public class QueryExecutor {
                 //System.out.println(useMatcher.group(0).trim());
                 UseQuery useQueryObj = new UseQuery();
                 globalDBDirectoryPath = useQueryObj.useDatabase(userArgument);
-                System.out.println("globalDBDirectoryPath->" + globalDBDirectoryPath);
+                //System.out.println("globalDBDirectoryPath->" + globalDBDirectoryPath);
                 queryValidation++;
             }
 

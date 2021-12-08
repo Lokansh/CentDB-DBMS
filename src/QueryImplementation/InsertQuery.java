@@ -47,7 +47,7 @@ public class InsertQuery {
             providedColumns = tempString2.substring(0, tempString2.length() - 1).trim()
                     .replaceAll("\"","")
                     .replaceAll("'","");
-            System.out.println("providedColumns->" + providedColumns);
+            //System.out.println("providedColumns->" + providedColumns);
         }
 
         //Extracting values from query
@@ -81,7 +81,7 @@ public class InsertQuery {
 
         File filePath = new File(tablePath);
         if (!tableName.isEmpty() || !onlyTableName.isEmpty()){
-            System.out.println("tablePath->" + tablePath);
+            //System.out.println("tablePath->" + tablePath);
             Boolean fileExist = filePath.isFile();
             if(!fileExist){
                 System.out.println("Table does not exist");
@@ -125,23 +125,23 @@ public class InsertQuery {
 
         List<String> providedColumnsList = null;
         List<String> providedValuesList = Arrays.asList(passedValues.replaceAll(" ","").split(","));
-        System.out.println("providedValuesList->" + providedValuesList);
+        //System.out.println("providedValuesList->" + providedValuesList);
 
         // read header from file
         File filePath = new File(path);
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         String header = br.readLine();
         List<String> headerColsList = Arrays.asList(header.replaceAll(" ","").split(","));
-        System.out.println("headerColsList->" + headerColsList);
+        //System.out.println("headerColsList->" + headerColsList);
         int totalColumnsLen = headerColsList.size();
 
         //Specific columns defined if condition
         if(passedColumns!=null) {
             providedColumnsList = Arrays.asList(passedColumns.replaceAll(" ","").split(","));
-            System.out.println("providedColumnsList->" + providedColumnsList);
+            //System.out.println("providedColumnsList->" + providedColumnsList);
 
             if(providedValuesList.size() != providedColumnsList.size()) {
-                System.out.println("SQLIntegrityConstraintExceptionRaised. There exists a row with the same Primary key column value.");
+                System.out.println("There exists a row with the same Primary key column value.");
                 return false;
             }
         }
@@ -153,12 +153,12 @@ public class InsertQuery {
         else{
             columnsList = headerColsList;
         }
-        System.out.println("columnsList-" + columnsList);
+        //System.out.println("columnsList-" + columnsList);
         //Putting data into map
         for (int i = 0; i < columnsList.size(); i++) {
             columnValueMap.put(columnsList.get(i), providedValuesList.get(i));
         }
-        System.out.println("columnValueMap--" + columnValueMap);
+        //System.out.println("columnValueMap--" + columnValueMap);
         //Method to get value from TableService.getPrimaryKey to get primary key from schema
         String primaryKeyColumnFromSchema=null;
         String primaryKeyValue=null;
@@ -170,7 +170,7 @@ public class InsertQuery {
         } catch (ExceptionHandler exceptionHandler) {
             exceptionHandler.printStackTrace();
         }
-        System.out.println("primaryKeyValue--" + primaryKeyValue);
+        //System.out.println("primaryKeyValue--" + primaryKeyValue);
         if(primaryKeyValue==null){
             System.out.println("Please provide value for Primary Key Attribute in query");
             return false;
@@ -181,7 +181,7 @@ public class InsertQuery {
         if(primaryKeyColumnFromSchema != null && primaryKeyValue != null) {
             ArrayList<String> valuesList = selectObj.selectTableQuery("select " + primaryKeyColumnFromSchema + " from " +
                                             pathList[1] + "." + pathList[2] + ";" , "PK_CHECK");
-            System.out.println("PRIMARY KEY -----" + valuesList.contains(primaryKeyValue));
+            //System.out.println("PRIMARY KEY -----" + valuesList.contains(primaryKeyValue));
             primaryKeyCheckBol = valuesList.contains(primaryKeyValue);
         }
 
