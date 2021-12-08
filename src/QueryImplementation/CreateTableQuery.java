@@ -54,6 +54,7 @@ public class CreateTableQuery {
                 //System.out.println("Database ELSE PART");
                 if (dbMatcher.find()) {
                     dbName = dbMatcher.group(0).trim();
+                    globalPath = "database_storage/";
                     System.out.println("USE query:" + dbName);
                     if(dbName.isEmpty()){
                         throw new DatabaseNotFoundException();
@@ -96,7 +97,7 @@ public class CreateTableQuery {
         }*/
 
 
-        String schema = "[" + tableName + "]" + "\n" + printSchemacolumn + ";" + "\n\n";
+        String schema = "\n[" + tableName + "]" + "\n" + printSchemacolumn + ";" + "\n";
         String schemaName = dbName + "_" + "schema";
         //System.out.println(schemaName);
         String schemaPath = /*DatabaseService.CURRENT_DATABASE_PATH*/ globalPath+ dbName + "/" + schemaName;
@@ -278,7 +279,7 @@ public class CreateTableQuery {
         }
     }
 
-    /*public static void main(String[] args) throws Exception {
+   /* public static void main(String[] args) throws Exception {
 
 
         String userArgument = null;
@@ -287,7 +288,7 @@ public class CreateTableQuery {
         userArgument = s.nextLine();
         userArgument = userArgument.trim();
         System.out.println("Input query is:" + userArgument);
-        new CreateTableQuery().createTable( userArgument,"database_storage/db1");
+        new CreateTableQuery().createTable( userArgument,"database_storage/db3");
 
         //create table db1.table1 (id int, name varchar(20));
         //CREATE TABLE Orders (OrderID int ,OrderNumber int ,PersonID int,PRIMARY KEY (OrderID),FOREIGN KEY (PersonID) REFERENCES Persons(PersonID));
