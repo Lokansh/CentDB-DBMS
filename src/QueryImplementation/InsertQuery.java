@@ -84,7 +84,7 @@ public class InsertQuery {
             //System.out.println("tablePath->" + tablePath);
             Boolean fileExist = filePath.isFile();
             if(!fileExist){
-                System.out.println("Please select database before inserting.");
+                System.out.println("Table does not exist");
                 return false;
             }
         }
@@ -167,15 +167,14 @@ public class InsertQuery {
             if(primaryKeyColumnFromSchema != null) {
                 primaryKeyValue = columnValueMap.get(primaryKeyColumnFromSchema);
             }
-            if(primaryKeyValue==null && primaryKeyColumnFromSchema != null){
-                System.out.println("Please provide value for Primary Key Attribute in query");
-                return false;
-            }
         } catch (ExceptionHandler exceptionHandler) {
             exceptionHandler.printStackTrace();
         }
         //System.out.println("primaryKeyValue--" + primaryKeyValue);
-
+        if(primaryKeyValue==null){
+            System.out.println("Please provide value for Primary Key Attribute in query");
+            return false;
+        }
 
         Boolean primaryKeyCheckBol = false;
         QueryOperations selectObj = new QueryOperations();
@@ -219,8 +218,8 @@ public class InsertQuery {
 
         String finalString = builder.toString();
         //System.out.println("builder->" + builder);
-        bw.append(finalString.substring(0, finalString.length() - 1));
         bw.append(System.lineSeparator());
+        bw.append(finalString.substring(0, finalString.length() - 1));
         bw.close();
 
         return true;
