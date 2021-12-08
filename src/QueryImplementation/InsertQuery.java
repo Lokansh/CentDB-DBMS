@@ -141,8 +141,7 @@ public class InsertQuery {
             System.out.println("providedColumnsList->" + providedColumnsList);
 
             if(providedValuesList.size() != providedColumnsList.size()) {
-                System.out.println("Please enter correct number of columns and values in query");
-                return false;
+                throw new SQLIntegrityConstraintExceptionRaised("SQLIntegrityConstraintExceptionRaised. There exists a row with the same Primary key column value.");                return false;
             }
         }
         //Assigning value to columnsList to create map of column with value
