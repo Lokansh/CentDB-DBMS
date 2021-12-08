@@ -3,6 +3,7 @@ package QueryImplementation;
 import authentication.model.Session;
 import exceptions.ExceptionHandler;
 import loggers.QueryLogger;
+import services.DatabaseService;
 
 import javax.imageio.IIOException;
 
@@ -17,7 +18,8 @@ import static QueryImplementation.CreateTableQuery.createTable;
 import static QueryImplementation.DropTableQuery.dropTable;
 
 public class QueryOperations {
-    private String dataStoragePath = "database_storage/";
+
+    private String dataStoragePath = DatabaseService.getRootDatabaseFolderPath();
     public Instant instant = Instant.now();
     public Boolean createDatabase(String query) throws ExceptionHandler {
         Pattern ptr = Pattern.compile("/^create database$/");
@@ -93,8 +95,10 @@ public class QueryOperations {
         String providedColumns = null;
         String provWhereClause = null;
         String tablename = null;
+        String tabledataStoragePath;
         Formatter fmt = new Formatter();
 
+        System.out.println(QueryExecutor.globalDBDirectoryPath);
         // Logic to extract table name and database name
         try {
             Pattern patternDBTable;
@@ -111,8 +115,12 @@ public class QueryOperations {
             if (tablename.contains(".")) {
                 database = tablename.split("\\.")[0];
                 table = tablename.split("\\.")[1];
+                tabledataStoragePath = dataStoragePath + database + "/" + table + "/";
             }
-            String tabledataStoragePath = dataStoragePath + database + "/" + table + "/";
+            else {
+                tabledataStoragePath = QueryExecutor.globalDBDirectoryPath+"/"+tablename+"/";
+            }
+
 
             // Logic to check if where clause is present
             Pattern patternWhereClause = Pattern.compile("(?<=where).*$", Pattern.DOTALL);
@@ -240,16 +248,7 @@ public class QueryOperations {
             return appendData;
     }
 
-    public static void main(String[] args) throws ExceptionHandler, IOException {
-        QueryOperations obj = new QueryOperations();
-        obj.selectTableQuery("select idf from db1.students;");  //wrong column name provided
-        obj.selectTableQuery("select id,name from db1.students;"); // specify all columns
-        obj.selectTableQuery("select * from db1.students;");        // select all columns
-        obj.selectTableQuery("select id from db1.students;");       // select some columns
-        obj.selectTableQuery("select id from db1.students where id=5;");      // specify where clause
-        obj.selectTableQuery("select name from db1.students where id=5;");
 
-    }
 }
 
 
