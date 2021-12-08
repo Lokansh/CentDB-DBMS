@@ -14,13 +14,13 @@ public class UseQuery {
         if (query.contains("use database")) {
             String subQuery = query.replace("use database", "").trim();
             String dbname = QueryOperations.removeSemiColon(subQuery);
-            System.out.println("dbname->" + dbname);
+            //System.out.println("dbname->" + dbname);
             String directoryPath = dataStoragePath + dbname;
             DatabaseService.CURRENT_DATABASE_PATH = DatabaseService.getRootDatabaseFolderPath() + dbname;
-            System.out.println(directoryPath);
+            //System.out.println(directoryPath);
             File theDir = new File(directoryPath);
             if (theDir.exists()) {
-                System.out.println("directory changed after use database query");
+                //System.out.println("directory changed after use database query");
                 return directoryPath;
             } else {
                 System.out.println("Database not present, please create database before using it");

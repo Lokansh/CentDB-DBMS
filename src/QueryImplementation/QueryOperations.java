@@ -27,7 +27,7 @@ public class QueryOperations {
             String subQuery = query.replace("create database", "");
             subQuery.trim();
             String dbname = removeSemiColon(subQuery);
-            System.out.println("dbname: "+ dbname);
+            //System.out.println("dbname: "+ dbname);
             File theDir = new File(dataStoragePath+dbname);
             if (!theDir.exists()){
                 theDir.mkdirs();
@@ -109,7 +109,7 @@ public class QueryOperations {
         while (matcherDBTable.find()) {
             tablename = removeSemiColon(matcherDBTable.group(0).trim());
         }
-        System.out.println("TableName: "+tablename);
+        //System.out.println("TableName: "+tablename);
 
         //String tablename = removeSemiColon(Query.substring(Query.indexOf("from") + 4).trim());
         if (tablename.contains(".")){
@@ -117,7 +117,7 @@ public class QueryOperations {
             table=tablename.split("\\.")[1];
         }
         String tabledataStoragePath = dataStoragePath+database+"/"+table+"/";
-        System.out.println("Table data location: "+tabledataStoragePath);
+        //System.out.println("Table data location: "+tabledataStoragePath);
 
         // Logic to check if where clause is present
         Pattern patternWhereClause = Pattern.compile("(?<=where).*$", Pattern.DOTALL);
@@ -125,7 +125,7 @@ public class QueryOperations {
         while (matcherWhere.find()) {
             provWhereClause = matcherWhere.group(0).trim();
         }
-        System.out.println("Filter Condition: "+provWhereClause);
+        //System.out.println("Filter Condition: "+provWhereClause);
 
         // Logic to extract columns
         Pattern patternColumns = Pattern.compile("select(.*?)from", Pattern.DOTALL);
@@ -133,7 +133,7 @@ public class QueryOperations {
         while (matcherColumns.find()) {
             providedColumns = matcherColumns.group(1).trim();
         }
-        System.out.println("Columns Required: "+providedColumns);
+        //System.out.println("Columns Required: "+providedColumns);
 
         List<String> providedColumnsList = Arrays.asList(providedColumns.split(","));
 
@@ -151,7 +151,7 @@ public class QueryOperations {
             counter=0;
             fmt.format("\n");
         }
-        System.out.println(fmt);
+        //System.out.println(fmt);
         return true;
     }
 

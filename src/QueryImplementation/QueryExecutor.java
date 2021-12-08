@@ -25,7 +25,7 @@ public class QueryExecutor {
             System.out.println("Enter Query-------");
             userArgument = scanner.nextLine();
             userArgument = userArgument.trim();
-            System.out.println("Input query is:" + userArgument);
+            //System.out.println("Input query is:" + userArgument);
 
             QueryOperations obj = new QueryOperations();
             constants_QI cons = new constants_QI();
@@ -34,7 +34,7 @@ public class QueryExecutor {
             Pattern createDBPattern = Pattern.compile(cons.CREATE_DB, Pattern.DOTALL);
             Matcher createDBMatcher = createDBPattern.matcher(userArgument);
             if (createDBMatcher.find()) {
-                System.out.println(createDBMatcher.group(0).trim());
+                //System.out.println(createDBMatcher.group(0).trim());
                 obj.createDatabase(userArgument);
             }
 
@@ -42,7 +42,7 @@ public class QueryExecutor {
             Pattern usePattern = Pattern.compile(cons.USE_DB, Pattern.DOTALL);
             Matcher useMatcher = usePattern.matcher(userArgument);
             if (useMatcher.find()) {
-                System.out.println(useMatcher.group(0).trim());
+                //System.out.println(useMatcher.group(0).trim());
                 UseQuery useQueryObj = new UseQuery();
                 globalDBDirectoryPath = useQueryObj.useDatabase(userArgument);
                 System.out.println("globalDBDirectoryPath->" + globalDBDirectoryPath);
@@ -52,7 +52,7 @@ public class QueryExecutor {
             Pattern createTBPattern = Pattern.compile(cons.CREATE_TB, Pattern.DOTALL);
             Matcher createTBmatcher = createTBPattern.matcher(userArgument);
             if (createTBmatcher.find()) {
-                System.out.println(createTBmatcher.group(0).trim());
+                //System.out.println(createTBmatcher.group(0).trim());
                 //obj.createSchema("create table table1 (id int(10),name varchar(25));",globalDBDirectoryPath);
                 obj.createSchema(userArgument, globalDBDirectoryPath);
             }
@@ -61,7 +61,7 @@ public class QueryExecutor {
             Pattern insertPattern = Pattern.compile(cons.INSERT_TB, Pattern.DOTALL);
             Matcher insertMatcher = insertPattern.matcher(userArgument);
             if (insertMatcher.find()) {
-                System.out.println(insertMatcher.group(0).trim());
+                //System.out.println(insertMatcher.group(0).trim());
 
                 InsertQuery insertQueryObj = new InsertQuery();
                 insertQueryObj.insertQuery(userArgument, globalDBDirectoryPath);
@@ -71,7 +71,7 @@ public class QueryExecutor {
             Pattern selectPattern = Pattern.compile(cons.SELECT_TB, Pattern.DOTALL);
             Matcher selectMatcher = selectPattern.matcher(userArgument);
             if (selectMatcher.find()) {
-                System.out.println(selectMatcher.group(0).trim());
+                //System.out.println(selectMatcher.group(0).trim());
                 obj.selectTableQuery(userArgument);
             }
 
@@ -79,7 +79,7 @@ public class QueryExecutor {
             Pattern updatePattern = Pattern.compile(cons.UPDATE_TB, Pattern.DOTALL);
             Matcher updateMatcher = updatePattern.matcher(userArgument);
             if (updateMatcher.find()) {
-                System.out.println(updateMatcher.group(0).trim());
+                //System.out.println(updateMatcher.group(0).trim());
                 UpdateQuery updateObj = new UpdateQuery();
                 updateObj.updateQuery(userArgument, globalDBDirectoryPath);
                 
@@ -89,7 +89,7 @@ public class QueryExecutor {
             Pattern deletePattern = Pattern.compile(cons.DELETE_ROW, Pattern.DOTALL);
             Matcher deleteMatcher = deletePattern.matcher(userArgument);
             if (deleteMatcher.find()) {
-                System.out.println(deleteMatcher.group(0).trim());
+                //System.out.println(deleteMatcher.group(0).trim());
                   // XXX No code for delete??
             }
 
@@ -97,7 +97,8 @@ public class QueryExecutor {
             Pattern dropPattern = Pattern.compile(cons.DROP_TB, Pattern.DOTALL);
             Matcher dropMatcher = dropPattern.matcher(userArgument);
             if (dropMatcher.find()) {
-                System.out.println(dropMatcher.group(0).trim());
+                //System.out.println(dropMatcher.group(0).trim());
+                // XXX No code for drop??
             }
 
             Pattern startTransactionPattern = Pattern.compile(cons.START_TRANSACTION, Pattern.CASE_INSENSITIVE);

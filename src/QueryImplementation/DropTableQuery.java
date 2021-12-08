@@ -23,9 +23,9 @@ public class DropTableQuery {
         Matcher result = tablePattern.matcher(query);
         if (result.find()) {
             table = result.group(1);
-            System.out.println(table);
+            //System.out.println(table);
         } else {
-            System.out.println("Please enter a valid query");
+            //System.out.println("Please enter a valid query");
             String logMessage = "Please enter a valid query to drop the table" + " | " +
                     "Time of Execution: " + instant + "ms";
             GeneralLogger.logGeneralData(query,logMessage);
@@ -35,8 +35,8 @@ public class DropTableQuery {
             dbName = table.split("\\.")[0];
             tableName = table.split("\\.")[1];
         }
-        System.out.println("Database Name: " + dbName);
-        System.out.println("Table name: " + tableName);
+        //System.out.println("Database Name: " + dbName);
+        //System.out.println("Table name: " + tableName);
         String tablePath = dataStoragePath + "/" + dbName + "/" + tableName /*+ ".txt"*/;
         try {
             File f = new File(tablePath);           //file to be delete

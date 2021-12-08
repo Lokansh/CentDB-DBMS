@@ -39,14 +39,14 @@ public class InsertQuery {
             while (matcherColumns.find()) {
                 providedColumnsStr = matcherColumns.group(0).trim();
             }
-            System.out.println("Provided values: "+providedColumnsStr);
+            //System.out.println("Provided values: "+providedColumnsStr);
             String tempString2 = QueryOperations.removeSemiColon(providedColumnsStr
                     .substring(providedColumnsStr.indexOf("(") + 1).trim());
-            System.out.println("tempString2->" + tempString2);
+            //System.out.println("tempString2->" + tempString2);
             providedColumns = tempString2.substring(0, tempString2.length() - 1).trim()
                     .replaceAll("\"","")
                     .replaceAll("'","");
-            System.out.println("providedColumns->" + providedColumns);
+            //System.out.println("providedColumns->" + providedColumns);
         }
 
         //Extracting values from query
@@ -55,15 +55,15 @@ public class InsertQuery {
         while (matcherValues.find()) {
             providedValuesStr = matcherValues.group(0).trim();
         }
-        System.out.println("Provided values: "+providedValuesStr);
+        //System.out.println("Provided values: "+providedValuesStr);
 
         String tempString3 = QueryOperations.removeSemiColon(providedValuesStr
                                 .substring(providedValuesStr.indexOf("(") + 1).trim());
-        System.out.println("tempString2->" + tempString3);
+        //System.out.println("tempString2->" + tempString3);
         providedValues = tempString3.substring(0, tempString3.length() - 1).trim()
                 .replaceAll("\"","")
                 .replaceAll("'","");
-        System.out.println("providedValues->" + providedValues);
+        //System.out.println("providedValues->" + providedValues);
 
         //Extracting table name
         tableName = tempArray[0];
@@ -74,18 +74,18 @@ public class InsertQuery {
             schemaPath = dataStoragePath + database + "/" + database + "_" + "schema";
         }
         else{
-            System.out.println("directoryPath ->" + directoryPath);
+            //System.out.println("directoryPath ->" + directoryPath);
             tablePath = directoryPath + "/" + tableName;
             schemaPath = directoryPath + database + "_" + "schema";
         }
-        System.out.println("tablePath ->" + tablePath);
+        //System.out.println("tablePath ->" + tablePath);
 
         File filePath = new File(tablePath);
         if (!tableName.isEmpty() || !onlyTableName.isEmpty()){
-            System.out.println("tablePath->" + tablePath);
+            //System.out.println("tablePath->" + tablePath);
             Boolean fileExist = filePath.isFile();
             if(!fileExist){
-                System.out.println("Table does not exist");
+                //System.out.println("Table does not exist");
                 return false;
             }
             /*
@@ -132,11 +132,11 @@ public class InsertQuery {
 
         List<String> providedColumnsList = null;
         List<String> providedValuesList = Arrays.asList(passedValues.split(","));
-        System.out.println("providedValuesList->" + providedValuesList);
+        //System.out.println("providedValuesList->" + providedValuesList);
 
         if(passedColumns!=null) {
             providedColumnsList = Arrays.asList(passedColumns.split(","));
-            System.out.println("providedColumnsList->" + providedColumnsList);
+            //System.out.println("providedColumnsList->" + providedColumnsList);
 
             if(providedValuesList.size() == providedColumnsList.size()) {
                 for (int i = 0; i < providedColumnsList.size(); i++) {
@@ -144,7 +144,7 @@ public class InsertQuery {
                 }
             }
             else{
-                System.out.println("Please enter correct number of columns and values in query");
+                //System.out.println("Please enter correct number of columns and values in query");
                 return false;
             }
         }
@@ -170,16 +170,16 @@ public class InsertQuery {
                 indexList.add(index);
             }
             for(String head : headerColsList){
-                System.out.println("Isnide 1 - " + finalValuesStr);
+                //System.out.println("Isnide 1 - " + finalValuesStr);
                 for(String column : providedColumnsList){
-                    System.out.println("Isnide 2 - " + finalValuesStr);
+                    //System.out.println("Isnide 2 - " + finalValuesStr);
                     if(head.equals(column)){
-                        System.out.println("Isnide 3 - " + finalValuesStr);
+                        //System.out.println("Isnide 3 - " + finalValuesStr);
                         finalValuesStr += columnValueMap.get(column) + ",";
                         continue;
                     }
                     else{
-                        System.out.println("Isnide 4 - " + finalValuesStr);
+                        //System.out.println("Isnide 4 - " + finalValuesStr);
                         finalValuesStr += "null,";
                         continue;
                     }

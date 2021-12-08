@@ -42,7 +42,7 @@ public class DeleteQuery {
             tablePath = directoryPath + "/" + tableName;
         }
 
-        System.out.println("tablePath ->" + tablePath);
+        //System.out.println("tablePath ->" + tablePath);
 
         // extracting where
         Pattern wherePattern = Pattern.compile(constant.WHERE_CLAUSE, Pattern.DOTALL);
@@ -75,7 +75,7 @@ public class DeleteQuery {
                 filePath.delete();
                 File newfile = new File(tempFilePath);
                 newfile.renameTo(filePath);
-                System.out.println("Delete successful");
+                System.out.println("Delete successfully completed.");
                 String logMessage = "Delete successful  " + " | " +
                         "Time of Execution: " + instant + "ms";
                 QueryLogger.logQueryData("Delete  " , Session.getInstance().getUser().getName() ,
