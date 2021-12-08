@@ -96,16 +96,18 @@ public class QueryExecutor {
             Pattern deletePattern = Pattern.compile(cons.DELETE_ROW, Pattern.DOTALL);
             Matcher deleteMatcher = deletePattern.matcher(userArgument);
             if (deleteMatcher.find()) {
-                //System.out.println(deleteMatcher.group(0).trim());
-                  // XXX No code for delete??
+                DeleteQuery delObj = new DeleteQuery();
+                delObj.deleteQuery(userArgument, globalDBDirectoryPath);
+                queryValidation++;
             }
 
             // Pattern Matcher for DROP
             Pattern dropPattern = Pattern.compile(cons.DROP_TB, Pattern.DOTALL);
             Matcher dropMatcher = dropPattern.matcher(userArgument);
             if (dropMatcher.find()) {
-                //System.out.println(dropMatcher.group(0).trim());
-                // XXX No code for drop??
+                DropTableQuery dropObj = new DropTableQuery();
+                dropObj.dropTable(userArgument, globalDBDirectoryPath);
+                queryValidation++;
             }
 
             Pattern startTransactionPattern = Pattern.compile(cons.START_TRANSACTION, Pattern.CASE_INSENSITIVE);
