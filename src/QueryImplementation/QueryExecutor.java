@@ -20,6 +20,7 @@ public class QueryExecutor {
 
     public void queryExecute() {
         try {
+            int queryValidation=0;
             // accept user input
             String userArgument = null;
             System.out.println("Enter Query-------");
@@ -36,6 +37,7 @@ public class QueryExecutor {
             if (createDBMatcher.find()) {
                 //System.out.println(createDBMatcher.group(0).trim());
                 obj.createDatabase(userArgument);
+                queryValidation++;
             }
 
             // Pattern Matcher for USE
@@ -46,6 +48,7 @@ public class QueryExecutor {
                 UseQuery useQueryObj = new UseQuery();
                 globalDBDirectoryPath = useQueryObj.useDatabase(userArgument);
                 System.out.println("globalDBDirectoryPath->" + globalDBDirectoryPath);
+                queryValidation++;
             }
 
             // Pattern Matcher for CREATE TABLE
@@ -55,6 +58,7 @@ public class QueryExecutor {
                 //System.out.println(createTBmatcher.group(0).trim());
                 //obj.createSchema("create table table1 (id int(10),name varchar(25));",globalDBDirectoryPath);
                 obj.createSchema(userArgument, globalDBDirectoryPath);
+                queryValidation++;
             }
 
             // Pattern Matcher for INSERT INTO TABLE
@@ -65,6 +69,7 @@ public class QueryExecutor {
 
                 InsertQuery insertQueryObj = new InsertQuery();
                 insertQueryObj.insertQuery(userArgument, globalDBDirectoryPath);
+                queryValidation++;
             }
 
             // Pattern Matcher for SELECT
@@ -73,6 +78,7 @@ public class QueryExecutor {
             if (selectMatcher.find()) {
                 //System.out.println(selectMatcher.group(0).trim());
                 obj.selectTableQuery(userArgument);
+                queryValidation++;
             }
 
             // Pattern Matcher for UPDATE
@@ -82,6 +88,7 @@ public class QueryExecutor {
                 //System.out.println(updateMatcher.group(0).trim());
                 UpdateQuery updateObj = new UpdateQuery();
                 updateObj.updateQuery(userArgument, globalDBDirectoryPath);
+                queryValidation++;
                 
             }
 
@@ -106,6 +113,7 @@ public class QueryExecutor {
             if (startTransactionMatcher.find()) {
                 StartTransactionQuery startTransactionQuery = new StartTransactionQuery();
                 startTransactionQuery.startTransaction();
+                queryValidation++;
             }
 
             Pattern rollbackTransactionPattern = Pattern.compile(cons.ROLLBACK_TRANSACTION, Pattern.CASE_INSENSITIVE);
@@ -113,6 +121,7 @@ public class QueryExecutor {
             if (rollbackTransactionMatcher.find()) {
                 RollbackQuery rollbackQuery = new RollbackQuery();
                 rollbackQuery.rollbackTransaction();
+                queryValidation++;
             }
 
             Pattern commitTransactionPattern = Pattern.compile(cons.COMMIT_TRANSACTION, Pattern.CASE_INSENSITIVE);
@@ -120,6 +129,7 @@ public class QueryExecutor {
             if (commitTransactionMatcher.find()) {
                 CommitTransactionQuery commitTransactionQuery = new CommitTransactionQuery();
                 commitTransactionQuery.commitTransaction();
+                queryValidation++;
             }
             // check if query does not have semicolon at the end
             if (!userArgument.contains(";")) {
@@ -127,9 +137,7 @@ public class QueryExecutor {
             }
 
             // check for invalid query
-            if (!commitTransactionMatcher.find() && !rollbackTransactionMatcher.find() && !startTransactionMatcher.find() &&
-            !dropMatcher.find() && !deleteMatcher.find() && !updateMatcher.find() && !selectMatcher.find() &&
-                    !insertMatcher.find() && !createTBmatcher.find() && !useMatcher.find() && !createDBMatcher.find()) {
+            if (queryValidation==0) {
                 throw new InvalidQueryFoundException("Invalid Query. No match found.");
             }
 
