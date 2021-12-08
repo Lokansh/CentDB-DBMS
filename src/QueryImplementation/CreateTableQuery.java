@@ -138,6 +138,18 @@ public class CreateTableQuery {
         //System.out.println("Inside FILE CREATION...");
         String tablePath = /*DatabaseService.CURRENT_DATABASE_PATH*/globalPath + dbName + "/" + tableName;
         File filePath = new File(tablePath);
+        //List<String> firstlinedata = new ArrayList<>();
+        String printfirstline  = "";
+        for (int i = 0; i < columnNames.size(); i++) {
+            String str = columnNames.get(i);
+            //firstlinedata.add(str.toLowerCase(Locale.ROOT));
+
+            if(i==columnNames.size()-1){
+                printfirstline = printfirstline+str.toLowerCase(Locale.ROOT);
+            }
+            else {
+            printfirstline = printfirstline+str.toLowerCase(Locale.ROOT) + ",";}
+        }
 
         if (!tableName.isEmpty()){
             Boolean fileExist = filePath.isFile();
@@ -149,7 +161,7 @@ public class CreateTableQuery {
                 try{
                     Boolean fileCreatedSuccess = filePath.createNewFile();
                     FileWriter myWriter = new FileWriter(filePath, true);
-                    myWriter.write(String.valueOf(columnNames));
+                    myWriter.write(printfirstline);
                     myWriter.close();
                     System.out.println("Table created -->" + fileCreatedSuccess);
                 }
@@ -279,7 +291,7 @@ public class CreateTableQuery {
         }
     }
 
-   /* public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
 
 
         String userArgument = null;
