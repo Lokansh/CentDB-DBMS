@@ -70,7 +70,7 @@ public class CreateTableQuery {
                     System.out.println("Creating schema");
                     // Piece added for Module 6
                     SqlDump obj = new SqlDump();
-                    obj.schemaDump(query);
+                    obj.schemaDump(query, dbName);
                     // end of module 6
 
                 }}
