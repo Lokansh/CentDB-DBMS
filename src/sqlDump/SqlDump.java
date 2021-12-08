@@ -145,7 +145,7 @@ public class SqlDump {
             BufferedWriter bwq = new BufferedWriter(
                     new FileWriter(constant.ARCHIVE_DUMP + database+ "_schema.sql",
                             true));
-            bwq.write(createQuery+"\n");
+            bwq.write(createQuery+";\n");
             bwq.close();
 
         } catch(IOException e){e.getStackTrace();}
