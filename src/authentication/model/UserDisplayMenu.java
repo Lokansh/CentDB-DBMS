@@ -3,6 +3,7 @@ package authentication.model;
 import QueryImplementation.QueryExecutor;
 import analytics.Analytics;
 import erd.ErdGeneration;
+import sqlDump.SqlDump;
 
 import java.util.Scanner;
 
@@ -41,6 +42,8 @@ public class UserDisplayMenu {
                     break;
                 case "3":
                     //"Export sql dump";
+                    SqlDump obj = new SqlDump();
+                    obj.exportDataAndStructure(scanner);
                     break;
                 case "4":
                     new Analytics(scanner).performAnalytics();

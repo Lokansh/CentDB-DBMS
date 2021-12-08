@@ -57,7 +57,7 @@ public class QueryOperations {
             //return false;
         }
     }
-    public boolean createSchema(String query, String path) throws ExceptionHandler {
+    public boolean createSchema(String query, String path) throws Exception {
         if(query.contains("create table")){
             createTable(query,path);
         }

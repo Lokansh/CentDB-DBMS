@@ -27,4 +27,6 @@ public class constants_QI {
     final String COMMIT_TRANSACTION = "\\s*commit\\s*;$";
     public final String ANALYTICS_COUNT_QUERIES = "\\s*count\\s*queries\\s*([a-zA-Z0-9_]+)\\s*;";
     public final String ANALYTICS_UPDATE_QUERIES = "\\s*count\\s*update\\s*([a-zA-Z0-9_]+)\\s*;";
+    public final String ARCHIVE_DUMP = "Archive\\";
+    public final String SQLDUMP_PATH = "database_export_dump\\";
 }

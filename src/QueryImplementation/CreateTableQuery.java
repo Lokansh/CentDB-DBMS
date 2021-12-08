@@ -1,5 +1,7 @@
 package QueryImplementation;
 
+import sqlDump.SqlDump;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -60,6 +62,10 @@ public class CreateTableQuery {
             }
             if(validateColumnData(query)){
             if(fileCreation(tableName,dbName)) {
+                // Piece added for Module 6
+                SqlDump obj = new SqlDump();
+                obj.schemaDump(query);
+                // end of module 6
                 createSchema(query, dbName, tableName);
             }}
         }

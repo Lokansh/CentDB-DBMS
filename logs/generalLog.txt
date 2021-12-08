@@ -13,3 +13,11 @@ lokansh | Login successful | Time of Execution: 2021-12-08T01:26:27.940269Zms
 lokansh | Login successful | Time of Execution: 2021-12-08T01:27:32.166667Zms
 lokansh | Login successful | Time of Execution: 2021-12-08T01:30:46.721441Zms
 lokansh | Login successful | Time of Execution: 2021-12-08T01:33:06.234859Zms
+nk | User registered successfully  | Time of Execution: 2021-12-08T11:44:44.185092800Zms
+nikita | Login successful | Time of Execution: 2021-12-08T11:45:08.097347200Zms
+nikita | Login successful | Time of Execution: 2021-12-08T11:49:48.098522800Zms
+nikita | Login successful | Time of Execution: 2021-12-08T11:53:01.954548600Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:00:56.151709200Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:06:09.102890700Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:07:53.355317Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:13:16.648055700Zms
