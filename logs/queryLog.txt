@@ -15,3 +15,6 @@ Query Operation   | nikita | db4 | null | create database db4; | Success  | 2021
 Insert   | lokansh | db1 | db1.students | insert into db1.students (id, address2) values (5,working); | Success  | 2021-12-08T15:58:51.543838Z
 Insert   | lokansh | db1 | db1.students | insert into db1.students (id,address,address2) values (5,working,working2); | Success  | 2021-12-08T15:58:51.543838Z
 Query Operation   | nikita | db5 | null | create database db5; | Success  | 2021-12-08T16:56:05.137036800Z
+Insert   | lokansh | db1 | db1.students | insert into db1.students values(3,Shelja,address); | Failure  | 2021-12-08T18:32:27.724006Z
+Update | lokansh | db1 | students | update db1.students set id=40 where id=3; | Failure | 2021-12-08T18:39:23.896391Z
+Update | lokansh | db1 | students | update db1.students set id=40 where id=3; | Failure | 2021-12-08T18:43:38.051914Z

@@ -77,7 +77,7 @@ public class QueryExecutor {
             Matcher selectMatcher = selectPattern.matcher(userArgument);
             if (selectMatcher.find()) {
                 //System.out.println(selectMatcher.group(0).trim());
-                obj.selectTableQuery(userArgument);
+                obj.selectTableQuery(userArgument,"SELECT");
                 queryValidation++;
             }
 

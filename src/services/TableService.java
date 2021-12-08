@@ -22,6 +22,7 @@ public class TableService {
         try (BufferedReader bReader = new BufferedReader(new FileReader(schema))) {
             String line = null;
             String table = null;
+            String primaryKeyValue = null;
             while ((line = bReader.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     table = null;
@@ -31,9 +32,10 @@ public class TableService {
                     table = line.substring(1, line.length() - 1);
                 }
                 if (tableName.equalsIgnoreCase(table) && line.contains("PRIMARY KEY")) {
-                    return line.substring(line.indexOf("(") + 1, line.indexOf(")"));
+                    primaryKeyValue = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
                 }
             }
+            return primaryKeyValue;
         } catch (Exception e) {
             e.printStackTrace();
         }

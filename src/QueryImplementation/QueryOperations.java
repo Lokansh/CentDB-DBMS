@@ -89,7 +89,7 @@ public class QueryOperations {
     // select * from a.b;
     // select * from b;
     // select name,age from a.b;
-    public Boolean selectTableQuery(String Query){
+    public ArrayList<String> selectTableQuery(String Query, String task){
         String database = null;
         String table = null;
         String providedColumns = null;
@@ -140,18 +140,24 @@ public class QueryOperations {
             List<String> data = readFile(tabledataStoragePath, providedColumns, provWhereClause);
 
             int colsLength = data.get(0).split(",").length;
+
             int counter = 0;
+            // added for PK check
+            ArrayList<String> pkcheck = new ArrayList<>();
             for (String s : data) {
                 while (counter <= colsLength - 1) {
+                    pkcheck.add(s.split(",")[counter]);
                     fmt.format("%20s ", s.split(",")[counter]);
                     counter++;
                 }
                 counter = 0;
                 fmt.format("\n");
             }
-            System.out.println(fmt);
-            return true;
-        } catch (IOException | ColumnsNotFoundException e) {return false;}
+            if (task.equals("SELECT")) {
+                System.out.println(fmt);
+            }
+            return pkcheck;
+        } catch (IOException | ColumnsNotFoundException e) {return null;}
     }
 
     // Read and Process data file

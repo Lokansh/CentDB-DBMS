@@ -4,6 +4,8 @@ import authentication.model.Session;
 import exceptions.ExceptionHandler;
 import loggers.GeneralLogger;
 import loggers.QueryLogger;
+import services.DatabaseService;
+import services.TableService;
 
 import java.io.*;
 import java.time.Instant;
@@ -12,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InsertQuery {
-    private String dataStoragePath = "database_storage/";
+    private String dataStoragePath = DatabaseService.getRootDatabaseFolderPath();
     public static Instant instant = Instant.now();
 
     //insert query
@@ -22,7 +24,6 @@ public class InsertQuery {
         String onlyTableName = "";
         String tableName = "";
         String tablePath;
-        String schemaPath;
         String providedColumnsStr = null;
         String providedColumns = null;
         String providedValuesStr = null;
@@ -46,7 +47,7 @@ public class InsertQuery {
             providedColumns = tempString2.substring(0, tempString2.length() - 1).trim()
                     .replaceAll("\"","")
                     .replaceAll("'","");
-            //System.out.println("providedColumns->" + providedColumns);
+            System.out.println("providedColumns->" + providedColumns);
         }
 
         //Extracting values from query
@@ -71,12 +72,10 @@ public class InsertQuery {
             database=tableName.split("\\.")[0];
             onlyTableName=tableName.split("\\.")[1];
             tablePath = dataStoragePath + database + "/" + onlyTableName + "/";
-            schemaPath = dataStoragePath + database + "/" + database + "_" + "schema";
         }
         else{
             //System.out.println("directoryPath ->" + directoryPath);
             tablePath = directoryPath + "/" + tableName;
-            schemaPath = directoryPath + database + "_" + "schema";
         }
         //System.out.println("tablePath ->" + tablePath);
 
@@ -98,7 +97,7 @@ public class InsertQuery {
             throw new ExceptionHandler(logMessage);
         }
 
-        Boolean insertData = validateWriteFile(tablePath, schemaPath, providedColumns, providedValues);
+        Boolean insertData = validateWriteFile(tablePath, providedColumns, providedValues);
 
         if(insertData) {
             System.out.println("Insert successful for " + tableName);
@@ -118,8 +117,7 @@ public class InsertQuery {
         }
     }
 
-    public Boolean validateWriteFile(String path, String schPath,
-                                     String passedColumns, String passedValues) throws IOException {
+    public Boolean validateWriteFile(String path, String passedColumns, String passedValues) throws IOException {
         HashMap<String, String> columnValueMap = new HashMap<String, String>();
         String[] pathList = path.split("/");
         String tableName = pathList[2];
@@ -127,35 +125,67 @@ public class InsertQuery {
 
         List<String> providedColumnsList = null;
         List<String> providedValuesList = Arrays.asList(passedValues.replaceAll(" ","").split(","));
-        //System.out.println("providedValuesList->" + providedValuesList);
+        System.out.println("providedValuesList->" + providedValuesList);
 
+        // read header from file
+        File filePath = new File(path);
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        String header = br.readLine();
+        List<String> headerColsList = Arrays.asList(header.replaceAll(" ","").split(","));
+        System.out.println("headerColsList->" + headerColsList);
+        int totalColumnsLen = headerColsList.size();
+
+        //Specific columns defined if condition
         if(passedColumns!=null) {
             providedColumnsList = Arrays.asList(passedColumns.replaceAll(" ","").split(","));
-            //System.out.println("providedColumnsList->" + providedColumnsList);
+            System.out.println("providedColumnsList->" + providedColumnsList);
 
-            if(providedValuesList.size() == providedColumnsList.size()) {
-                for (int i = 0; i < providedColumnsList.size(); i++) {
-                    columnValueMap.put(providedColumnsList.get(i), providedValuesList.get(i));
-                }
-            }
-            else{
+            if(providedValuesList.size() != providedColumnsList.size()) {
                 System.out.println("Please enter correct number of columns and values in query");
                 return false;
             }
         }
+        //Assigning value to columnsList to create map of column with value
+        List<String> columnsList;
+        if(passedColumns!=null && providedColumnsList.size()>1) {
+            columnsList = providedColumnsList;
+        }
+        else{
+            columnsList = headerColsList;
+        }
+        System.out.println("columnsList-" + columnsList);
+        //Putting data into map
+        for (int i = 0; i < columnsList.size(); i++) {
+            columnValueMap.put(columnsList.get(i), providedValuesList.get(i));
+        }
+        System.out.println("columnValueMap--" + columnValueMap);
+        //Method to get value from TableService.getPrimaryKey to get primary key from schema
+        String primaryKeyColumn=null;
+        String primaryKeyValue=null;
+        try{
+            primaryKeyColumn = TableService.getPrimaryKey(dataStoragePath + pathList[1],tableName);
+            if(primaryKeyColumn != null) {
+                primaryKeyValue = columnValueMap.get(primaryKeyColumn);
+            }
+        } catch (ExceptionHandler exceptionHandler) {
+            exceptionHandler.printStackTrace();
+        }
 
-        File filePath = new File(path);
-        File schemaPath = new File(schPath);
+        Boolean primaryKeyCheckBol = false;
+        QueryOperations selectObj = new QueryOperations();
+        if(primaryKeyColumn != null && primaryKeyValue != null) {
+            ArrayList<String> valuesList = selectObj.selectTableQuery("select " + primaryKeyColumn + " from " +
+                                            pathList[1] + "." + pathList[2] + ";" , "PK_CHECK");
+            System.out.println("PRIMARY KEY -----" + valuesList.contains(primaryKeyValue));
+            primaryKeyCheckBol = valuesList.contains(primaryKeyValue);
+        }
+
+        if(primaryKeyCheckBol){
+            System.out.println("Value already exists with Primary key - " + primaryKeyValue);
+            return false;
+        }
+
         BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true));
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        BufferedReader bReadSchema = new BufferedReader(new FileReader(schemaPath));
-
-        // read header from file
-        String header = br.readLine();
-        List<String> headerColsList = Arrays.asList(header.replaceAll(" ","").split(","));
-        //System.out.println("headerColsList->" + headerColsList);
-        //int totalColumnsLen = headerColsList.size();
-
 
         if(passedColumns == null){
             if(headerColsList.size() == providedValuesList.size()) {
