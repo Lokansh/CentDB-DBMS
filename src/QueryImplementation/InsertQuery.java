@@ -200,7 +200,7 @@ public class InsertQuery {
         System.out.println("Enter Query-------");
         userArgument = s.nextLine();
         userArgument = userArgument.trim();
-        System.out.println("Input query is:" + userArgument);
+        //System.out.println("Input query is:" + userArgument);
         InsertQuery insertObj = new InsertQuery();
         insertObj.insertQuery(userArgument,null);
     }

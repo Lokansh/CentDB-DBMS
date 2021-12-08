@@ -18,6 +18,18 @@ public class Main {
         if(!file.exists()) {
             file.mkdir();
         }
+        File file_database_export_dump = new File("database_export_dump");
+        if(!file_database_export_dump.exists()) {
+            file_database_export_dump.mkdir();
+        }
+        File fileArchive = new File("Archive");
+        if(!fileArchive.exists()) {
+            fileArchive.mkdir();
+        }
+        File fileAnalytics = new File("analytics");
+        if(!fileAnalytics.exists()) {
+            fileAnalytics.mkdir();
+        }
 
         while (true) {
             System.out.println("1. User Registration");

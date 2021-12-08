@@ -82,6 +82,7 @@ public class QueryExecutor {
                 System.out.println(updateMatcher.group(0).trim());
                 UpdateQuery updateObj = new UpdateQuery();
                 updateObj.updateQuery(userArgument, globalDBDirectoryPath);
+                
             }
 
             // Pattern Matcher for DELETE
@@ -89,6 +90,7 @@ public class QueryExecutor {
             Matcher deleteMatcher = deletePattern.matcher(userArgument);
             if (deleteMatcher.find()) {
                 System.out.println(deleteMatcher.group(0).trim());
+                  // XXX No code for delete??
             }
 
             // Pattern Matcher for DROP
@@ -118,8 +120,32 @@ public class QueryExecutor {
                 CommitTransactionQuery commitTransactionQuery = new CommitTransactionQuery();
                 commitTransactionQuery.commitTransaction();
             }
+            // check if query does not have semicolon at the end
+            if (!userArgument.contains(";")) {
+                throw new EndOfQueryNotFoundException("Please provide semicolon at the end of the query.");
+            }
+
+            // check for invalid query
+            if (!commitTransactionMatcher.find() && !rollbackTransactionMatcher.find() && !startTransactionMatcher.find() &&
+            !dropMatcher.find() && !deleteMatcher.find() && !updateMatcher.find() && !selectMatcher.find() &&
+                    !insertMatcher.find() && !createTBmatcher.find() && !useMatcher.find() && !createDBMatcher.find()) {
+                throw new InvalidQueryFoundException("Invalid Query. No match found.");
+            }
+
         } catch (Exception e) {
             e.getStackTrace();
         }
+    }
+}
+
+class EndOfQueryNotFoundException extends Exception{
+    EndOfQueryNotFoundException(String message){
+        System.out.println(message);
+    }
+}
+
+class InvalidQueryFoundException extends Exception{
+    InvalidQueryFoundException(String message){
+        System.out.println(message);
     }
 }

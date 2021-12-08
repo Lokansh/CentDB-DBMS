@@ -10,3 +10,5 @@ Insert   | lokansh |  | people | insert into people values(5,67); | Success  | 2
 Create  | lokansh | null | null | create table students(id int,name varchar(20)) | Success  | 2021-12-07T17:00:24.513880Z
 Create  | lokansh | null | null | create table students(id int,name varchar(20)) | Failure  | 2021-12-07T17:00:24.513880Z
 Query Operation   | nikita | db2 | null | create database db2; | Success  | 2021-12-08T11:45:41.815611300Z
+Query Operation   | nikita | db3 | null | create database db3; | Success  | 2021-12-08T12:36:25.990404600Z
+Query Operation   | nikita | db4 | null | create database db4; | Success  | 2021-12-08T12:39:30.680244600Z

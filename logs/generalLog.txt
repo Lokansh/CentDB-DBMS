@@ -21,3 +21,11 @@ nikita | Login successful | Time of Execution: 2021-12-08T12:00:56.151709200Zms
 nikita | Login successful | Time of Execution: 2021-12-08T12:06:09.102890700Zms
 nikita | Login successful | Time of Execution: 2021-12-08T12:07:53.355317Zms
 nikita | Login successful | Time of Execution: 2021-12-08T12:13:16.648055700Zms
+nikita | Invalid credentials | Time of Execution: 2021-12-08T12:17:58.792381400Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:18:21.025129Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:29:48.723087400Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:31:02.748383800Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:35:59.242187Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:39:04.041802Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:41:28.447759500Zms
+nikita | Login successful | Time of Execution: 2021-12-08T12:48:33.105298300Zms

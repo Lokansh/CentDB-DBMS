@@ -71,7 +71,7 @@ public class SqlDump {
 
             // get the data dump
             for (File file : listOfFiles) {
-                if (file.isFile()) {
+                if (file.isFile() && !file.getName().contains("_schema")) {
                     //System.out.println(file.getName());
                     String tableName = file.getName();
                     String tbFilePath = dbFolderPath + tableName + "/";

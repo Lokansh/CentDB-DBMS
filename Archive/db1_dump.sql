@@ -13,29 +13,6 @@ INSERT INTO `courses` VALUES ('c1','CSCI1000','3');
 UNLOCK TABLES;
 
 --
--- Dumping data for table `db1_schema`
---
-
-LOCK TABLES `db1_schema` WRITE;
-INSERT INTO `db1_schema` VALUES ('OrderID int','');
-INSERT INTO `db1_schema` VALUES ('OrderNumber int','');
-INSERT INTO `db1_schema` VALUES ('FKPersonId int','');
-INSERT INTO `db1_schema` VALUES ('PRIMARY KEY (OrderID)','');
-INSERT INTO `db1_schema` VALUES ('FOREIGN KEY (FKPersonId) REFERENCES testTable11(PersonID)','');
-INSERT INTO `db1_schema` VALUES ('FOREIGN KEY (FKPersonId2) REFERENCES testTable12(PersonID);');
-INSERT INTO `db1_schema` VALUES ('');
-INSERT INTO `db1_schema` VALUES ('[table11]');
-INSERT INTO `db1_schema` VALUES ('PersonID int','');
-INSERT INTO `db1_schema` VALUES ('Personname varchar','');
-INSERT INTO `db1_schema` VALUES ('PRIMARY KEY (OrderID);');
-INSERT INTO `db1_schema` VALUES ('');
-INSERT INTO `db1_schema` VALUES ('[table12]');
-INSERT INTO `db1_schema` VALUES ('PersonID int','');
-INSERT INTO `db1_schema` VALUES ('Personname varchar','');
-INSERT INTO `db1_schema` VALUES ('PRIMARY KEY (OrderID);');
-UNLOCK TABLES;
-
---
 -- Dumping data for table `students`
 --
 
