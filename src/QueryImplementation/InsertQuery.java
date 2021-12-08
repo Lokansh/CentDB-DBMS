@@ -160,21 +160,26 @@ public class InsertQuery {
         }
         System.out.println("columnValueMap--" + columnValueMap);
         //Method to get value from TableService.getPrimaryKey to get primary key from schema
-        String primaryKeyColumn=null;
+        String primaryKeyColumnFromSchema=null;
         String primaryKeyValue=null;
         try{
-            primaryKeyColumn = TableService.getPrimaryKey(dataStoragePath + pathList[1],tableName);
-            if(primaryKeyColumn != null) {
-                primaryKeyValue = columnValueMap.get(primaryKeyColumn);
+            primaryKeyColumnFromSchema = TableService.getPrimaryKey(dataStoragePath + pathList[1],tableName);
+            if(primaryKeyColumnFromSchema != null) {
+                primaryKeyValue = columnValueMap.get(primaryKeyColumnFromSchema);
             }
         } catch (ExceptionHandler exceptionHandler) {
             exceptionHandler.printStackTrace();
         }
+        System.out.println("primaryKeyValue--" + primaryKeyValue);
+        if(primaryKeyValue==null){
+            System.out.println("Please provide value for Primary Key Attribute in query");
+            return false;
+        }
 
         Boolean primaryKeyCheckBol = false;
         QueryOperations selectObj = new QueryOperations();
-        if(primaryKeyColumn != null && primaryKeyValue != null) {
-            ArrayList<String> valuesList = selectObj.selectTableQuery("select " + primaryKeyColumn + " from " +
+        if(primaryKeyColumnFromSchema != null && primaryKeyValue != null) {
+            ArrayList<String> valuesList = selectObj.selectTableQuery("select " + primaryKeyColumnFromSchema + " from " +
                                             pathList[1] + "." + pathList[2] + ";" , "PK_CHECK");
             System.out.println("PRIMARY KEY -----" + valuesList.contains(primaryKeyValue));
             primaryKeyCheckBol = valuesList.contains(primaryKeyValue);

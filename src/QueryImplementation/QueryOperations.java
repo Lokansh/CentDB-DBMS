@@ -14,7 +14,6 @@ import java.util.regex.Matcher;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-import static QueryImplementation.CreateTableQuery.createTable;
 import static QueryImplementation.DropTableQuery.dropTable;
 
 public class QueryOperations {
