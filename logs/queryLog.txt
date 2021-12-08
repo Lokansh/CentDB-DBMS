@@ -12,3 +12,5 @@ Create  | lokansh | null | null | create table students(id int,name varchar(20))
 Query Operation   | nikita | db2 | null | create database db2; | Success  | 2021-12-08T11:45:41.815611300Z
 Query Operation   | nikita | db3 | null | create database db3; | Success  | 2021-12-08T12:36:25.990404600Z
 Query Operation   | nikita | db4 | null | create database db4; | Success  | 2021-12-08T12:39:30.680244600Z
+Insert   | lokansh | db1 | db1.students | insert into db1.students (id, address2) values (5,working); | Success  | 2021-12-08T15:58:51.543838Z
+Insert   | lokansh | db1 | db1.students | insert into db1.students (id,address,address2) values (5,working,working2); | Success  | 2021-12-08T15:58:51.543838Z

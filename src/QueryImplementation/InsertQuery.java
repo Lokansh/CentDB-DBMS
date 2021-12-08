@@ -58,7 +58,7 @@ public class InsertQuery {
         //System.out.println("Provided values: "+providedValuesStr);
 
         String tempString3 = QueryOperations.removeSemiColon(providedValuesStr
-                                .substring(providedValuesStr.indexOf("(") + 1).trim());
+                .substring(providedValuesStr.indexOf("(") + 1).trim());
         //System.out.println("tempString2->" + tempString3);
         providedValues = tempString3.substring(0, tempString3.length() - 1).trim()
                 .replaceAll("\"","")
@@ -82,22 +82,13 @@ public class InsertQuery {
 
         File filePath = new File(tablePath);
         if (!tableName.isEmpty() || !onlyTableName.isEmpty()){
-            //System.out.println("tablePath->" + tablePath);
+            System.out.println("tablePath->" + tablePath);
             Boolean fileExist = filePath.isFile();
             if(!fileExist){
-                //System.out.println("Table does not exist");
+                System.out.println("Table does not exist");
                 return false;
             }
-            /*
-            System.out.println("File created or file exists operation complete");
-            String logMessage = "File created or file exists operation complete  " + " | " +
-                    "Time of Execution: " + instant + "ms";
-            QueryLogger.logQueryData("Insert  " , Session.getInstance().getUser().getName() ,
-                    database,tableName,query ,"Success " , instant);
-
-             */
         }
-        /*
         else if(directoryPath.isEmpty()){
             System.out.println("Database not selected, please select database before inserting any values");
             String logMessage = "Database was not selected while inserting  " + " | " +
@@ -105,37 +96,41 @@ public class InsertQuery {
             QueryLogger.logQueryData("Insert  " , Session.getInstance().getUser().getName() ,
                     database,tableName,query ,"Failure " , instant);
             throw new ExceptionHandler(logMessage);
-            //return false;
         }
-
-         */
 
         Boolean insertData = validateWriteFile(tablePath, schemaPath, providedColumns, providedValues);
 
         if(insertData) {
             System.out.println("Insert successful for " + tableName);
+            String logMessage = "Insert successful for " + tableName + " | " +
+                    "Time of Execution: " + instant + "ms";
+            QueryLogger.logQueryData("Insert  " , Session.getInstance().getUser().getName() ,
+                    database,tableName,query ,"Success " , instant);
             return true;
         }
         else {
             System.out.println("Insert not successful");
-            return false;
+            String logMessage = "Insert not successful  " + " | " +
+                    "Time of Execution: " + instant + "ms";
+            QueryLogger.logQueryData("Insert  " , Session.getInstance().getUser().getName() ,
+                    database,tableName,query ,"Failure " , instant);
+            throw new ExceptionHandler(logMessage);
         }
     }
 
-    public Boolean validateWriteFile(String path, String schPath, String passedColumns, String passedValues) throws IOException {
-        List<Integer> indexList = new ArrayList<>();
-        List<String> appendData = new ArrayList<>();
+    public Boolean validateWriteFile(String path, String schPath,
+                                     String passedColumns, String passedValues) throws IOException {
         HashMap<String, String> columnValueMap = new HashMap<String, String>();
         String[] pathList = path.split("/");
         String tableName = pathList[2];
-        String finalValuesStr=null;
+        StringBuilder builder = new StringBuilder();
 
         List<String> providedColumnsList = null;
-        List<String> providedValuesList = Arrays.asList(passedValues.split(","));
+        List<String> providedValuesList = Arrays.asList(passedValues.replaceAll(" ","").split(","));
         //System.out.println("providedValuesList->" + providedValuesList);
 
         if(passedColumns!=null) {
-            providedColumnsList = Arrays.asList(passedColumns.split(","));
+            providedColumnsList = Arrays.asList(passedColumns.replaceAll(" ","").split(","));
             //System.out.println("providedColumnsList->" + providedColumnsList);
 
             if(providedValuesList.size() == providedColumnsList.size()) {
@@ -144,7 +139,7 @@ public class InsertQuery {
                 }
             }
             else{
-                //System.out.println("Please enter correct number of columns and values in query");
+                System.out.println("Please enter correct number of columns and values in query");
                 return false;
             }
         }
@@ -157,51 +152,54 @@ public class InsertQuery {
 
         // read header from file
         String header = br.readLine();
-        List<String> headerColsList = Arrays.asList(header.split(","));
+        List<String> headerColsList = Arrays.asList(header.replaceAll(" ","").split(","));
+        //System.out.println("headerColsList->" + headerColsList);
         //int totalColumnsLen = headerColsList.size();
 
 
-        if(passedColumns == null && (headerColsList.size() == providedValuesList.size())){
-            finalValuesStr = passedValues;
-        }
-        else {
-            for (String s : providedColumnsList) {
-                int index = headerColsList.indexOf(s);
-                indexList.add(index);
+        if(passedColumns == null){
+            if(headerColsList.size() == providedValuesList.size()) {
+                builder.append(passedValues);
             }
-            for(String head : headerColsList){
-                //System.out.println("Isnide 1 - " + finalValuesStr);
-                for(String column : providedColumnsList){
-                    //System.out.println("Isnide 2 - " + finalValuesStr);
-                    if(head.equals(column)){
-                        //System.out.println("Isnide 3 - " + finalValuesStr);
-                        finalValuesStr += columnValueMap.get(column) + ",";
-                        continue;
-                    }
-                    else{
-                        //System.out.println("Isnide 4 - " + finalValuesStr);
-                        finalValuesStr += "null,";
-                        continue;
-                    }
+            else{
+                System.out.println("Please provide correct number of arguments in string");
+                return false;
+            }
+        }
+        else{
+            ArrayList<String> headerColsArrayList = new ArrayList<String>(headerColsList);
+            ArrayList<String> providedColumnsArrayList = new ArrayList<String>(providedColumnsList);
+
+            for(String s : headerColsArrayList){
+                int getIndex = providedColumnsArrayList.indexOf(s);
+                //System.out.println(getIndex);
+                if(getIndex == -1){
+                    builder.append("null,");
+                } else {
+                    builder.append(columnValueMap.get(s) + ",");
                 }
             }
         }
 
-        bw.append(finalValuesStr);
+        String finalString = builder.toString();
+        //System.out.println("builder->" + builder);
+        bw.append(finalString.substring(0, finalString.length() - 1));
         bw.append(System.lineSeparator());
         bw.close();
 
         return true;
     }
 
+/*
     public static void main(String[] args) throws ExceptionHandler, IOException {
         String userArgument = null;
         Scanner s = new Scanner(System.in);
         System.out.println("Enter Query-------");
         userArgument = s.nextLine();
         userArgument = userArgument.trim();
-        //System.out.println("Input query is:" + userArgument);
+        System.out.println("Input query is:" + userArgument);
         InsertQuery insertObj = new InsertQuery();
         insertObj.insertQuery(userArgument,null);
     }
+    */
 }
