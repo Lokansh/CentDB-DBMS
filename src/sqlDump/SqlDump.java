@@ -132,7 +132,7 @@ public class SqlDump {
 
 
     // create a separate schema dump at the time of create query for the respective database
-    public void schemaDump(String createQuery){
+    public void schemaDump(String createQuery, String databaseName){
         String database;
 
         try {
@@ -141,7 +141,7 @@ public class SqlDump {
             Matcher dbTBMatcher = dbTBPattern.matcher(createQuery);
             if (dbTBMatcher.find()){
                 database = dbTBMatcher.group(0).trim();
-            } else {database="db2";}        // XXX to be removed later
+            } else {database=databaseName;}        // XXX to be removed later
             BufferedWriter bwq = new BufferedWriter(
                     new FileWriter(constant.ARCHIVE_DUMP + database+ "_schema.sql",
                             true));
