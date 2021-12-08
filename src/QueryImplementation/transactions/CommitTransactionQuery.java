@@ -3,6 +3,7 @@ package QueryImplementation.transactions;
 import exceptions.ExceptionHandler;
 import loggers.EventLogger;
 import services.DatabaseService;
+import services.TableService;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -58,24 +59,19 @@ public class CommitTransactionQuery {
             throw new ExceptionHandler(eventMessage);
         }
         for (File table : allTables) {
-            boolean isTableDeleted = table.delete();
-            if (!isTableDeleted) {
-                System.out.println("Failed to delete tables of the database ");
-                String eventMessage = "Failed to delete tables of the database " + realDatabase + " | " +
-                        "Time of Execution: " + instant + "ms";
-                EventLogger.eventLogData(eventMessage);
-                throw new ExceptionHandler(eventMessage);
+            if (TableService.isTable(table)) {
+                boolean isTableDeleted = table.delete();
+                if (!isTableDeleted) {
+                    System.out.println("Failed to delete tables of the database ");
+                    String eventMessage = "Failed to delete tables of the database " + realDatabase + " | " +
+                            "Time of Execution: " + instant + "ms";
+                    EventLogger.eventLogData(eventMessage);
+                    throw new ExceptionHandler(eventMessage);
+                }
             }
         }
-        boolean isRealDatabaseDeleted = realDatabase.delete();
-        if (!isRealDatabaseDeleted) {
-            System.out.println("Database " + realDatabase + " deletion error!");
-            String eventMessage = "Deletion error for" + realDatabase + " Database" + " | " +
-                    "Time of Execution: " + instant + "ms";
-            EventLogger.eventLogData(eventMessage);
-            throw new ExceptionHandler(eventMessage);
-        }
-        if (realDatabase.mkdir()) {
+
+        if (realDatabase.exists()) {
             File[] tempTables = tempDatabase.listFiles();
             if (tempTables == null) {
                 System.out.println("Database is empty");
