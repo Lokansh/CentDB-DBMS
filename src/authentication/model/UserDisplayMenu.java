@@ -2,6 +2,7 @@ package authentication.model;
 
 import QueryImplementation.QueryExecutor;
 import analytics.Analytics;
+import erd.ErdGeneration;
 
 import java.util.Scanner;
 
@@ -35,6 +36,8 @@ public class UserDisplayMenu {
                     break;
                 case "2":
                     //"generate ERD";
+                    ErdGeneration erdObj = new ErdGeneration(scanner);
+                    erdObj.erdGenerate();
                     break;
                 case "3":
                     //"Export sql dump";

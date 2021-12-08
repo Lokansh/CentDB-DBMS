@@ -16,7 +16,7 @@ public class DatabaseService {
     public static boolean isTransactionRunning = false;
     public static String CURRENT_DATABASE_PATH = null;
 
-    public List<Path> getAllDatabases() {
+    public static List<Path> getAllDatabases() {
         List<Path> databases = null;
         Path path = Paths.get(ROOT_DATABASE_FOLDER_PATH);
         try {

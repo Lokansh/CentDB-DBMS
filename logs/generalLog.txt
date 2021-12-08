@@ -1,3 +1,15 @@
 Username  |  Log message
 shel | User registered successfully  | Time of Execution: 2021-12-06T20:17:52.327225500Zms
 shelja | Login successful | Time of Execution: 2021-12-06T20:18:07.935412Zms
+lokansh | User registered successfully  | Time of Execution: 2021-12-06T21:21:06.482204Zms
+lokansh | Login successful | Time of Execution: 2021-12-06T21:21:33.904562Zms
+lokansh | Login successful | Time of Execution: 2021-12-07T16:58:38.788303Zms
+lokansh | Invalid credentials | Time of Execution: 2021-12-08T00:59:24.572505Zms
+lokansh | Login successful | Time of Execution: 2021-12-08T00:59:59.033466Zms
+lokansh | Login successful | Time of Execution: 2021-12-08T01:07:46.951415Zms
+lokansh | Login successful | Time of Execution: 2021-12-08T01:24:23.069463Zms
+lokansh | Login successful | Time of Execution: 2021-12-08T01:25:44.010519Zms
+lokansh | Login successful | Time of Execution: 2021-12-08T01:26:27.940269Zms
+lokansh | Login successful | Time of Execution: 2021-12-08T01:27:32.166667Zms
+lokansh | Login successful | Time of Execution: 2021-12-08T01:30:46.721441Zms
+lokansh | Login successful | Time of Execution: 2021-12-08T01:33:06.234859Zms

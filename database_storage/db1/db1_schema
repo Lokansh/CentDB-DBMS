@@ -1,0 +1,17 @@
+[order]
+OrderID int,
+OrderNumber int,
+FKPersonId int,
+PRIMARY KEY (OrderID),
+FOREIGN KEY (FKPersonId) REFERENCES testTable11(PersonID),
+FOREIGN KEY (FKPersonId2) REFERENCES testTable12(PersonID);
+
+[table11]
+PersonID int,
+Personname varchar,
+PRIMARY KEY (OrderID);
+
+[table12]
+PersonID int,
+Personname varchar,
+PRIMARY KEY (OrderID);
