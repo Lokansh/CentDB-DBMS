@@ -141,7 +141,8 @@ public class InsertQuery {
             System.out.println("providedColumnsList->" + providedColumnsList);
 
             if(providedValuesList.size() != providedColumnsList.size()) {
-                throw new SQLIntegrityConstraintExceptionRaised("SQLIntegrityConstraintExceptionRaised. There exists a row with the same Primary key column value.");                return false;
+                System.out.println("SQLIntegrityConstraintExceptionRaised. There exists a row with the same Primary key column value.");
+                return false;
             }
         }
         //Assigning value to columnsList to create map of column with value
@@ -218,17 +219,4 @@ public class InsertQuery {
 
         return true;
     }
-
-/*
-    public static void main(String[] args) throws ExceptionHandler, IOException {
-        String userArgument = null;
-        Scanner s = new Scanner(System.in);
-        System.out.println("Enter Query-------");
-        userArgument = s.nextLine();
-        userArgument = userArgument.trim();
-        System.out.println("Input query is:" + userArgument);
-        InsertQuery insertObj = new InsertQuery();
-        insertObj.insertQuery(userArgument,null);
-    }
-    */
 }
