@@ -95,69 +95,60 @@ public class QueryOperations {
         String tablename = null;
         Formatter fmt = new Formatter();
 
-        // converting query to lower case
-        //Query = Query.toLowerCase();
-
         // Logic to extract table name and database name
-        Pattern patternDBTable;
-        if (Query.contains("where")){
-            patternDBTable = Pattern.compile("(?<=from)(.*)(?=where)", Pattern.DOTALL);
-        } else {
-            patternDBTable = Pattern.compile("(?<=from)(.*)(?=;|)", Pattern.DOTALL);
-        }
-        Matcher matcherDBTable = patternDBTable.matcher(Query);
-        while (matcherDBTable.find()) {
-            tablename = removeSemiColon(matcherDBTable.group(0).trim());
-        }
-        //System.out.println("TableName: "+tablename);
-
-        //String tablename = removeSemiColon(Query.substring(Query.indexOf("from") + 4).trim());
-        if (tablename.contains(".")){
-            database=tablename.split("\\.")[0];
-            table=tablename.split("\\.")[1];
-        }
-        String tabledataStoragePath = dataStoragePath+database+"/"+table+"/";
-        //System.out.println("Table data location: "+tabledataStoragePath);
-
-        // Logic to check if where clause is present
-        Pattern patternWhereClause = Pattern.compile("(?<=where).*$", Pattern.DOTALL);
-        Matcher matcherWhere = patternWhereClause.matcher(Query);
-        while (matcherWhere.find()) {
-            provWhereClause = matcherWhere.group(0).trim();
-        }
-        //System.out.println("Filter Condition: "+provWhereClause);
-
-        // Logic to extract columns
-        Pattern patternColumns = Pattern.compile("select(.*?)from", Pattern.DOTALL);
-        Matcher matcherColumns = patternColumns.matcher(Query);
-        while (matcherColumns.find()) {
-            providedColumns = matcherColumns.group(1).trim();
-        }
-        //System.out.println("Columns Required: "+providedColumns);
-
-        List<String> providedColumnsList = Arrays.asList(providedColumns.split(","));
-
-        // Logic to get data from the generated path for the required columns
-        List<String> data = readFile(tabledataStoragePath, providedColumns, provWhereClause);
-
-        int colsLength = data.get(0).split(",").length;
-        int counter=0;
-        for (String s: data)
-        {
-            while (counter<=colsLength-1){
-                fmt.format("%20s ", s.split(",")[counter]);
-                counter++;
+        try {
+            Pattern patternDBTable;
+            if (Query.contains("where")) {
+                patternDBTable = Pattern.compile("(?<=from)(.*)(?=where)", Pattern.DOTALL);
+            } else {
+                patternDBTable = Pattern.compile("(?<=from)(.*)(?=;|)", Pattern.DOTALL);
             }
-            counter=0;
-            fmt.format("\n");
-        }
-        //System.out.println(fmt);
-        return true;
+            Matcher matcherDBTable = patternDBTable.matcher(Query);
+            while (matcherDBTable.find()) {
+                tablename = removeSemiColon(matcherDBTable.group(0).trim());
+            }
+
+            if (tablename.contains(".")) {
+                database = tablename.split("\\.")[0];
+                table = tablename.split("\\.")[1];
+            }
+            String tabledataStoragePath = dataStoragePath + database + "/" + table + "/";
+
+            // Logic to check if where clause is present
+            Pattern patternWhereClause = Pattern.compile("(?<=where).*$", Pattern.DOTALL);
+            Matcher matcherWhere = patternWhereClause.matcher(Query);
+            while (matcherWhere.find()) {
+                provWhereClause = matcherWhere.group(0).trim();
+            }
+
+            // Logic to extract columns
+            Pattern patternColumns = Pattern.compile("select(.*?)from", Pattern.DOTALL);
+            Matcher matcherColumns = patternColumns.matcher(Query);
+            while (matcherColumns.find()) {
+                providedColumns = matcherColumns.group(1).trim();
+            }
+
+            // Logic to get data from the generated path for the required columns
+            List<String> data = readFile(tabledataStoragePath, providedColumns, provWhereClause);
+
+            int colsLength = data.get(0).split(",").length;
+            int counter = 0;
+            for (String s : data) {
+                while (counter <= colsLength - 1) {
+                    fmt.format("%20s ", s.split(",")[counter]);
+                    counter++;
+                }
+                counter = 0;
+                fmt.format("\n");
+            }
+            System.out.println(fmt);
+            return true;
+        } catch (IOException | ColumnsNotFoundException e) {return false;}
     }
 
     // Read and Process data file
-    public List<String> readFile(String path, String columns, String filter) {
-        try {
+    public List<String> readFile(String path, String columns, String filter) throws IOException, ColumnsNotFoundException {
+        //try {
             // initialization
             String st;
             Pattern patternWhereKey = null;
@@ -192,12 +183,18 @@ public class QueryOperations {
                 filterColPos = headercolsList.indexOf(filterColumn);
             }
 
-            // read given columns
+            // read file actual columns
             int provColumnsLen = fileColumnsLen;
             List<String> provColsList = headercolsList;
+
+
             if (!columns.equals("*")) {
                 provColsList = Arrays.asList(columns.split(","));
                 provColumnsLen = provColsList.size();
+            }
+
+            if (!headercolsList.containsAll(provColsList)) {
+                throw new ColumnsNotFoundException("ColumnsNotFoundException Raised. The specified columns does not exists in the table.");
             }
 
             // if all columns not selected then below
@@ -241,7 +238,24 @@ public class QueryOperations {
                 }
             }
             return appendData;
-        } catch (IOException e) {System.out.println(Arrays.toString(e.getStackTrace()));}
-        return null;
+    }
+
+    public static void main(String[] args) throws ExceptionHandler, IOException {
+        QueryOperations obj = new QueryOperations();
+        obj.selectTableQuery("select idf from db1.students;");  //wrong column name provided
+        obj.selectTableQuery("select id,name from db1.students;"); // specify all columns
+        obj.selectTableQuery("select * from db1.students;");        // select all columns
+        obj.selectTableQuery("select id from db1.students;");       // select some columns
+        obj.selectTableQuery("select id from db1.students where id=5;");      // specify where clause
+        obj.selectTableQuery("select name from db1.students where id=5;");
+
+    }
+}
+
+
+
+class ColumnsNotFoundException extends Exception{
+    ColumnsNotFoundException(String message){
+        System.out.println(message);
     }
 }
