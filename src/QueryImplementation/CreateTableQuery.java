@@ -1,8 +1,4 @@
 package QueryImplementation;
-
-//import sqlDump.SqlDump;
-
-import services.DatabaseService;
 import sqlDump.SqlDump;
 
 import java.io.*;
@@ -32,6 +28,7 @@ public class CreateTableQuery {
     public  boolean createTable(String query, String path) throws Exception {
         constants_QI constant  = new constants_QI();
         query = QueryOperations.removeSemiColon(query);
+        System.out.println(path);
         globalPath = path;
         Pattern tablePattern = Pattern.compile(".*create\\s+table\\s+(.*?)($|\\s+)", Pattern.CASE_INSENSITIVE);
         Matcher result = tablePattern.matcher(query);
@@ -39,23 +36,14 @@ public class CreateTableQuery {
 
         if (result.find() ) {
             table = result.group(1);
-            //System.out.println(table);
-            if (table.contains(".")) {
-                dbName = table.split("\\.")[0];
-                tableName = table.split("\\.")[1];
-                //System.out.println("Database Name: " + dbName);
-                //System.out.println("Table name: " + tableName);
 
-            }
-            else{
-                //dbName = ;
                 Pattern dbPattern = Pattern.compile(constant.EXTRACT_DB_FROM_GLOBALPATH, Pattern.DOTALL);
-                Matcher dbMatcher = dbPattern.matcher(globalPath);
+                Matcher dbMatcher = dbPattern.matcher(path);
                 //System.out.println("Database ELSE PART");
                 if (dbMatcher.find()) {
                     dbName = dbMatcher.group(0).trim();
-                    globalPath = "database_storage/";
-                    System.out.println("USE query:" + dbName);
+                    //globalPath = "database_storage/";
+                    //System.out.println("USE query:" + dbName);
                     if(dbName.isEmpty()){
                         throw new DatabaseNotFoundException();
                     }
@@ -63,14 +51,14 @@ public class CreateTableQuery {
                 tableName = result.group(1);
                 //System.out.println("Database Name: " + dbName);
                 //System.out.println("Table name: " + tableName);
-            }
+            //}
             if(validateColumnData(query)){
                 if(fileCreation(tableName,dbName)) {
                     createSchema(query, dbName, tableName);
                     System.out.println("Creating schema");
                     // Piece added for Module 6
                     SqlDump obj = new SqlDump();
-                    obj.schemaDump(query, dbName);
+                    obj.schemaDump(query);
                     // end of module 6
 
                 }}
@@ -91,16 +79,11 @@ public class CreateTableQuery {
             listcolumn.add(str.trim());
         }
         String printSchemacolumn = String.join(",\n",listcolumn);
-       /* for (String str:
-             columnData) {
-
-        }*/
-
-
+      
         String schema = "\n[" + tableName + "]" + "\n" + printSchemacolumn + ";" + "\n";
         String schemaName = dbName + "_" + "schema";
         //System.out.println(schemaName);
-        String schemaPath = /*DatabaseService.CURRENT_DATABASE_PATH*/ globalPath+ dbName + "/" + schemaName;
+        String schemaPath = globalPath + "/" + schemaName;
         //System.out.println(schemaPath);
 
         if (!schemaPath.isEmpty() && !globalPath.isEmpty()) {
@@ -121,9 +104,9 @@ public class CreateTableQuery {
                 } else {
                     File createFile = new File(schemaPath);
                     Boolean fileCreatedSuccess = createFile.createNewFile();
-                    System.out.println("Schema does not exist -->" + fileCreatedSuccess);
+                    System.out.println("Schema file created: " + fileCreatedSuccess);
                     FileWriter myWriter = new FileWriter(checkFile, true);
-                    myWriter.write(columnData);
+                    myWriter.write(schema);
                     myWriter.close();
                     //System.out.println("Schema file exists..");
                     //System.out.println("Inside else");
@@ -134,9 +117,9 @@ public class CreateTableQuery {
         }}
 
     //creating table
-    public  boolean fileCreation(String tableName, String dbName){
+    public  boolean fileCreation(String tableName, String dbName) throws Exception {
         //System.out.println("Inside FILE CREATION...");
-        String tablePath = /*DatabaseService.CURRENT_DATABASE_PATH*/globalPath + dbName + "/" + tableName;
+        String tablePath = globalPath + "/" + tableName;
         File filePath = new File(tablePath);
         //List<String> firstlinedata = new ArrayList<>();
         String printfirstline  = "";
@@ -154,7 +137,7 @@ public class CreateTableQuery {
         if (!tableName.isEmpty()){
             Boolean fileExist = filePath.isFile();
             if(fileExist){
-                //System.out.println("Table exists");
+                System.out.println("Table already exists");
                 return false;
             }
             else{
@@ -209,7 +192,7 @@ public class CreateTableQuery {
                 if (str.toUpperCase(Locale.ROOT).contains("INT")  || str.toUpperCase(Locale.ROOT).contains("VARCHAR")|| str.toUpperCase(Locale.ROOT).contains("BOOLEAN")) {
                     continue;
                 } else {
-                    //System.out.println(str);
+                    System.out.println("");
                     throw new InvalidDatatypeException();
                 }
             }
@@ -224,6 +207,7 @@ public class CreateTableQuery {
         //validating duplicate column
         HashSet<String> set = new HashSet<String>(columnNames);
         if(set.size()<columnNames.size()){
+            System.out.println("Duplicate columns");
             throw new DuplicateColumnException();
         }
         System.out.println("Valid columnData.");
@@ -235,8 +219,9 @@ public class CreateTableQuery {
     public  void validatePrimarykey(String primarykeyvalidation) throws Exception {
         String primarykey = null;
         primarykey = primarykeyvalidation.substring(primarykeyvalidation.indexOf("PRIMARY KEY ") + 13, primarykeyvalidation.indexOf(")"));
-        //System.out.println("Primary key: "+ primarykey);
+        System.out.println("Primary key: "+ primarykey);
         if(!columnNames.contains(primarykey.toUpperCase(Locale.ROOT))){
+            System.out.println("Invalid primary key");
             throw new Exception("Invalid primary key.");
         }
         //else{
@@ -252,18 +237,19 @@ public class CreateTableQuery {
         if (foreignkeyvalidation.contains("REFERENCES")){
             foreignkey = foreignkeyvalidation.substring(foreignkeyvalidation.indexOf("FOREIGN KEY ") + 13, foreignkeyvalidation.indexOf(")") );
             foreignkey = foreignkey.toUpperCase(Locale.ROOT);
-            //System.out.println("Foreign key : "+foreignkey);
+            System.out.println("Foreign key : "+foreignkey);
             if(!columnNames.contains(foreignkey)){
+                System.out.println("Invalid foreign key");
                 throw new Exception("Invalid foreign key");
             }
 
             referredTable = foreignkeyvalidation.substring(foreignkeyvalidation.indexOf("REFERENCES ") +11 ,foreignkeyvalidation.lastIndexOf("("));
-            //System.out.println("Table: "+ referredTable);
+            System.out.println("Table: "+ referredTable);
             referredprimarykey = foreignkeyvalidation.substring(foreignkeyvalidation.indexOf(referredTable) + referredTable.length() + 1 , foreignkeyvalidation.lastIndexOf(")"));
-            referredprimarykey = referredprimarykey.toUpperCase(Locale.ROOT);
-            //System.out.println("Foreign key reference : "+ referredprimarykey);
+            //referredprimarykey = referredprimarykey;
+            System.out.println("Foreign key reference : "+ referredprimarykey);
 
-            String tablePath = /*DatabaseService.CURRENT_DATABASE_PATH*/ globalPath+ dbName + "/" + referredTable;
+            String tablePath = globalPath+ "/" + referredTable;
             File filePath = new File(tablePath);
             //System.out.println("ReferenceTable Path: " +tablePath);
 
@@ -278,37 +264,20 @@ public class CreateTableQuery {
                     filecolumnname = filecolumnname.substring(filecolumnname.indexOf("["),filecolumnname.indexOf("]"));
                     List < String > splitword1 = Arrays.asList(filecolumnname.split(","));
                     if(!filecolumnname.contains(referredprimarykey)){
+                        System.out.println("Invalid reference...");
                         throw new Exception("invalid referred column");
                     }
+
                 }
                 else{
+                    System.out.println("Tabel does not exist.");
                     throw new Exception("Tabel does not exist.");
                 }
             }
         }
         else{
+
             throw new InvalidQueryException();
         }
     }
-
-    /*public static void main(String[] args) throws Exception {
-
-
-        String userArgument = null;
-        Scanner s = new Scanner(System.in);
-        System.out.println("Enter Query-------");
-        userArgument = s.nextLine();
-        userArgument = userArgument.trim();
-        System.out.println("Input query is:" + userArgument);
-        new CreateTableQuery().createTable( userArgument,"database_storage/db3");
-
-        //create table db1.table1 (id int, name varchar(20));
-        //CREATE TABLE Orders (OrderID int ,OrderNumber int ,PersonID int,PRIMARY KEY (OrderID),FOREIGN KEY (PersonID) REFERENCES Persons(PersonID));
-        //CREATE TABLE db1.testTable1 (OrderID int ,OrderNumber int ,PersonID int);
-        //CREATE TABLE Orders (OrderID int ,OrderNumber int ,PersonID int,PRIMARY KEY (OrderID));
-        //CREATE TABLE db1.testTable3 (OrderID int ,OrderNumber int ,PersonID int,PRIMARY KEY (OrderID),FOREIGN KEY (PersonID) REFERENCES testTable1(PersonID));
-    }*/
-
-
-
 }
